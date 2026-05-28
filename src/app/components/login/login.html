@@ -1,0 +1,77 @@
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-5">
+
+            <div class="card shadow">
+
+                <div class="card-body p-4">
+
+                    <h2 class="text-center mb-4">
+                        <i class="fa-solid fa-right-to-bracket me-2"></i>
+                        Iniciar sesión
+                    </h2>
+
+                    @if(status() === 0){
+                    <div class="alert alert-danger">
+                        Usuario o contraseña incorrecta
+                    </div>
+                    }
+
+                    @if(status() === 1){
+                    <div class="alert alert-warning">
+                        Error del servidor
+                    </div>
+                    }
+
+                    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+
+                        <!-- EMAIL -->
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Correo electrónico
+                            </label>
+
+                            <input type="email" name="email" class="form-control" [(ngModel)]="user.email" required>
+
+                        </div>
+
+                        <!-- PASSWORD -->
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Contraseña
+                            </label>
+
+                            <input type="password" name="password" class="form-control" [(ngModel)]="user.password"
+                                required>
+
+                        </div>
+
+                        <!-- BUTTON -->
+                        <button type="submit" class="btn btn-primary w-100">
+
+                            <i class="fa-solid fa-sign-in-alt me-1"></i>
+                            Ingresar
+
+                        </button>
+
+                    </form>
+                    <div class="text-center mt-3">
+                        <span>¿No tienes cuenta?</span>
+                        <a routerLink="/register" class="ms-1">Regístrate aquí</a>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
