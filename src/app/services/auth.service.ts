@@ -5,99 +5,86 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { enviroment } from "../enviroments";
 
 export interface LoginResponse {
-    access_token: string;
-    user: User;   
+  access_token: string;
+  user: User;
 }
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class AuthService {
 
-    private readonly url: string;
+  private readonly url: string;
 
-    currentUser = signal<User | null>(null);
+  currentUser = signal<User | null>(null);
 
-    constructor(private _http: HttpClient) {
-        this.url = enviroment.apiUrl;
+  constructor(private _http: HttpClient) {
+    this.url = enviroment.apiUrl;
+    this.restoreSession();
+  }
 
-        this.restoreSession();
-    }
+  private restoreSession(): void {
+    const identity = sessionStorage.getItem('identity');
+    const token = sessionStorage.getItem('token');
 
-    // RESTAURAR SESIÓN AL INICIAR APP
-    private restoreSession(): void {
-
-        const identity = sessionStorage.getItem('identity');
-        const token = sessionStorage.getItem('token');
-
-        if (identity && identity !== 'undefined' && token) {
-
-            try {
-                const user: User = JSON.parse(identity);
-                this.currentUser.set(user); 
-            } catch (e) {
-                console.error('Error parsing identity', e);
-                this.clearSession();
-            }
-
-        } else {
-            this.clearSession();
-        }
-    }
-
-    //  LOGIN
-    login(credentials: User): Observable<LoginResponse> {
-
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json'
-        });
-
-        return this._http.post<LoginResponse>(
-            this.url + "login",
-            credentials,
-            { headers }
-        ).pipe(
-            tap((response) => {
-
-                console.log('LOGIN RESPONSE:', response);
-
-                // ✅ GUARDAR USUARIO CORRECTO
-                this.currentUser.set(response.user);
-
-                // ✅ SESSION STORAGE
-                sessionStorage.setItem('token', response.access_token);
-                sessionStorage.setItem('identity', JSON.stringify(response.user));
-
-            })
-        );
-    }
-
-    //  LOGOUT
-    logout(): void {
+    if (identity && identity !== 'undefined' && token) {
+      try {
+        const user: User = JSON.parse(identity);
+        this.currentUser.set(user);
+      } catch (e) {
+        console.error('Error parsing identity', e);
         this.clearSession();
-        this.currentUser.set(null);
+      }
+    } else {
+      this.clearSession();
     }
+  }
 
-    //  LIMPIAR SESIÓN
-    private clearSession(): void {
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('identity');
-    }
-
-    //  AUTH CHECK (para guards)
-    isAuthenticated(): boolean {
-        return this.currentUser() !== null;
-    }
-    register(user: User): Observable<any> {
-
+  login(credentials: User): Observable<LoginResponse> {
     const headers = new HttpHeaders({
-        'Content-Type': 'application/json'
+      'Content-Type': 'application/json'
+    });
+
+    return this._http.post<LoginResponse>(
+      this.url + "login",
+      credentials,
+      { headers }
+    ).pipe(
+      tap((response) => {
+        this.currentUser.set(response.user);
+        sessionStorage.setItem('token', response.access_token);
+        sessionStorage.setItem('identity', JSON.stringify(response.user));
+      })
+    );
+  }
+
+  logout(): void {
+    this.clearSession();
+    this.currentUser.set(null);
+  }
+
+  private clearSession(): void {
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('identity');
+  }
+
+  isAuthenticated(): boolean {
+    return !!sessionStorage.getItem('token');
+  }
+
+  register(user: User): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
     });
 
     return this._http.post(
-        this.url + "users",
-        user,
-        { headers }
+      this.url + "users",
+      user,
+      { headers }
     );
-}
+  }
+
+  getToken(): string | null {
+    return sessionStorage.getItem('token');
+  }
 }

@@ -1,59 +1,121 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary px-3">
+<div class="hl-wrapper" [class.hl-collapsed]="collapsed">
 
-    <!-- LOGO -->
-    <a class="navbar-brand fw-bold">
-        <i class="fa-solid fa-hotel me-2"></i>
-        ReservaApp
-    </a>
+    <!-- SIDEBAR -->
+    <nav class="hl-sidebar">
 
-    <!-- MENÚ IZQUIERDA -->
-    <ul class="navbar-nav me-auto">
+        <div class="hl-logo">
+            <div class="hl-logo-icon">
+                <i class="fa-solid fa-building"></i>
+            </div>
+            <span class="hl-logo-text">Hotel</span>
+        </div>
 
-        <li class="nav-item">
-            <a [routerLink]="['/home']" class="nav-link">
-                <i class="fa-solid fa-house me-1"></i>
-                Inicio
+        <div class="hl-nav-section">
+            <a routerLink="/dashboard" routerLinkActive="hl-active" class="hl-nav-item">
+                <i class="fa-solid fa-gauge"></i>
+                <span class="hl-nav-label">Dashboard</span>
             </a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link">
-                <i class="fa-solid fa-calendar-check me-1"></i>
-                Reservas
+            <a routerLink="/reservas" routerLinkActive="hl-active" class="hl-nav-item">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span class="hl-nav-label">Reservas</span>
             </a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link">
-                <i class="fa-solid fa-bed me-1"></i>
-                Habitaciones
+            <a routerLink="/clientes" routerLinkActive="hl-active" class="hl-nav-item">
+                <i class="fa-solid fa-users"></i>
+                <span class="hl-nav-label">Clientes</span>
             </a>
-        </li>
-
-    </ul>
-
-    <!-- MENÚ DERECHA -->
-    <ul class="navbar-nav ms-auto">
-
-        <li class="nav-item">
-            <span class="nav-link text-white">
-                <i class="fa-solid fa-user me-1"></i>
-                {{authService.currentUser()?.name}}
-            </span>
-        </li>
-
-        <li class="nav-item">
-            <a (click)="logout()" class="nav-link text-warning">
-                <i class="fa-solid fa-right-from-bracket me-1"></i>
-                Logout
+            <a routerLink="/reportes" routerLinkActive="hl-active" class="hl-nav-item">
+                <i class="fa-solid fa-chart-bar"></i>
+                <span class="hl-nav-label">Reportes</span>
             </a>
-        </li>
+        </div>
 
-    </ul>
+        <div class="hl-nav-divider"></div>
 
-</nav>
+        <div class="hl-nav-section">
 
-<!-- CONTENIDO SIEMPRE -->
-<div class="container mt-3">
-    <router-outlet></router-outlet>
+            @if(authService.currentUser()?.role === 'Administrador') {
+            <button class="hl-nav-item hl-sub-toggle"
+                    [class.hl-active]="cfgOpen"
+                    (click)="cfgOpen = !cfgOpen">
+                <i class="fa-solid fa-gear"></i>
+                <span class="hl-nav-label">Configuración</span>
+                <i class="fa-solid fa-chevron-down hl-chevron"
+                   [style.transform]="cfgOpen ? 'rotate(180deg)' : 'rotate(0deg)'"></i>
+            </button>
+
+            <div class="hl-submenu" [class.hl-submenu-open]="cfgOpen">
+                <a routerLink="/tarifas" routerLinkActive="hl-sub-active" class="hl-sub-item">
+                    <i class="fa-solid fa-tag"></i>
+                    <span>Tarifas</span>
+                </a>
+                <a routerLink="/habitaciones" routerLinkActive="hl-sub-active" class="hl-sub-item">
+                    <i class="fa-solid fa-bed"></i>
+                    <span>Habitaciones</span>
+                </a>
+                <a routerLink="/usuarios" routerLinkActive="hl-sub-active" class="hl-sub-item">
+                    <i class="fa-solid fa-user-group"></i>
+                    <span>Usuarios</span>
+                </a>
+                <a routerLink="/recepcionistas" routerLinkActive="hl-sub-active" class="hl-sub-item">
+                    <i class="fa-solid fa-id-badge"></i>
+                    <span>Recepcionistas</span>
+                </a>
+            </div>
+            }
+
+        </div>
+
+        <div class="hl-sidebar-bottom">
+            <a (click)="logout()" class="hl-nav-item hl-logout">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span class="hl-nav-label">Salir</span>
+            </a>
+        </div>
+
+    </nav>
+
+    <!-- LADO DERECHO -->
+    <div class="hl-body">
+
+        <!-- HEADER -->
+        <header class="hl-header">
+            <div class="hl-header-left">
+                <i class="fa-solid fa-bars hl-menu-icon" (click)="toggleSidebar()"></i>
+               
+               
+            </div>
+
+            <div class="hl-header-right">
+                <!-- <button class="hl-icon-btn" aria-label="Notificaciones">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="hl-badge"></span>
+                </button> -->
+
+                <span class="hl-header-divider"></span>
+
+                <div class="hl-user-chip">
+                    <div class="hl-avatar">
+                        @if(userImageBase64) {
+                        <img [src]="userImageBase64" alt="avatar"
+                            style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />
+                        } @else {
+                        {{ initials }}
+                        }
+                    </div>
+                    <div class="hl-user-info">
+                        <span class="hl-user-name">{{ authService.currentUser()?.name }}</span>
+                        <span class="hl-user-role">{{ authService.currentUser()?.role }}</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down hl-chevron"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTENIDO -->
+        <main class="hl-main">
+            <router-outlet></router-outlet>
+        </main>
+
+    </div>
+
 </div>

@@ -1,77 +1,60 @@
-<div class="container mt-5">
+<div class="lg-wrapper">
 
-    <div class="row justify-content-center">
+  <div class="lg-card">
 
-        <div class="col-md-5">
-
-            <div class="card shadow">
-
-                <div class="card-body p-4">
-
-                    <h2 class="text-center mb-4">
-                        <i class="fa-solid fa-right-to-bracket me-2"></i>
-                        Iniciar sesión
-                    </h2>
-
-                    @if(status() === 0){
-                    <div class="alert alert-danger">
-                        Usuario o contraseña incorrecta
-                    </div>
-                    }
-
-                    @if(status() === 1){
-                    <div class="alert alert-warning">
-                        Error del servidor
-                    </div>
-                    }
-
-                    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
-
-                        <!-- EMAIL -->
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                Correo electrónico
-                            </label>
-
-                            <input type="email" name="email" class="form-control" [(ngModel)]="user.email" required>
-
-                        </div>
-
-                        <!-- PASSWORD -->
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                Contraseña
-                            </label>
-
-                            <input type="password" name="password" class="form-control" [(ngModel)]="user.password"
-                                required>
-
-                        </div>
-
-                        <!-- BUTTON -->
-                        <button type="submit" class="btn btn-primary w-100">
-
-                            <i class="fa-solid fa-sign-in-alt me-1"></i>
-                            Ingresar
-
-                        </button>
-
-                    </form>
-                    <div class="text-center mt-3">
-                        <span>¿No tienes cuenta?</span>
-                        <a routerLink="/register" class="ms-1">Regístrate aquí</a>
-                    </div>
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
+    <div class="lg-logo">
+      <div class="lg-logo-icon">
+        <i class="fa-solid fa-building"></i>
+      </div>
+      <span class="lg-logo-text">Hotel</span>
     </div>
+
+    <h2 class="lg-title">Iniciar sesión</h2>
+    <p class="lg-subtitle">Ingresa tus credenciales para continuar</p>
+
+    @if(status() === 0) {
+    <div class="lg-alert lg-alert-danger">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      Usuario o contraseña incorrecta
+    </div>
+    }
+
+    @if(status() === 1) {
+    <div class="lg-alert lg-alert-warning">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      Error del servidor
+    </div>
+    }
+
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+
+      <div class="lg-field">
+        <label class="lg-label">Correo electrónico</label>
+        <div class="lg-input-wrap">
+          <i class="fa-solid fa-envelope lg-input-icon"></i>
+          <input type="email" name="email" class="lg-input"
+                 placeholder="correo@ejemplo.com"
+                 [(ngModel)]="user.email" required />
+        </div>
+      </div>
+
+      <div class="lg-field">
+        <label class="lg-label">Contraseña</label>
+        <div class="lg-input-wrap">
+          <i class="fa-solid fa-lock lg-input-icon"></i>
+          <input type="password" name="password" class="lg-input"
+                 placeholder="••••••••"
+                 [(ngModel)]="user.password" required />
+        </div>
+      </div>
+
+      <button type="submit" class="lg-btn">
+        <i class="fa-solid fa-right-to-bracket me-1"></i>
+        Ingresar
+      </button>
+
+    </form>
+
+  </div>
 
 </div>
