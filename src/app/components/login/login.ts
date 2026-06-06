@@ -2,7 +2,7 @@ import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
-
+import Swal from 'sweetalert2';
 import { User } from '../../models/user';
 import { AuthService, LoginResponse } from '../../services/auth.service';
 
@@ -33,8 +33,19 @@ export class Login {
     }
 
     this.authService.login(this.user).subscribe({
+
+
+
       next: (response: LoginResponse) => {
-        this.router.navigate(['/home']);
+        Swal.fire({
+          icon: 'success',
+          title: '¡Bienvenido!',
+          text: `Hola, ${response.user.name ?? ''}`,
+          timer: 1500,
+          showConfirmButton: false
+        }).then(() => {
+          this.router.navigate(['/home']);
+        });
       },
       error: (err) => {
         if (err.status === 401 || err.status === 404) {
