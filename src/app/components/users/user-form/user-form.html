@@ -14,48 +14,60 @@
 
       <div class="usr-form-group">
         <label class="usr-label">Nombre <span class="usr-required">*</span></label>
-        <input type="text" class="usr-input" placeholder="Nombre completo"
-          name="name" [(ngModel)]="user.name" required />
+        <input type="text" class="usr-input" placeholder="Nombre completo" name="name" [(ngModel)]="user.name"
+          required />
       </div>
 
       <div class="usr-form-group">
         <label class="usr-label">Correo <span class="usr-required">*</span></label>
-        <input type="email" class="usr-input" placeholder="correo@ejemplo.com"
-          name="email" [(ngModel)]="user.email" required />
+        <input type="email" class="usr-input" placeholder="correo@ejemplo.com" name="email" [(ngModel)]="user.email"
+          required />
       </div>
 
       <div class="usr-form-group">
         <label class="usr-label">
           Contraseña
           @if(!editMode) { <span class="usr-required">*</span> }
-          @if(editMode)  { <span class="usr-optional">(vacío = sin cambios)</span> }
+          @if(editMode) { <span class="usr-optional">(vacío = sin cambios)</span> }
         </label>
-        <input type="password" class="usr-input" placeholder="••••••••"
-          name="password" [(ngModel)]="user.password" [required]="!editMode" />
+        <input type="password" class="usr-input" placeholder="••••••••" name="password" [(ngModel)]="user.password"
+          [required]="!editMode" />
       </div>
 
       <div class="usr-form-group">
         <label class="usr-label">Rol <span class="usr-required">*</span></label>
-        <select class="usr-input" name="role" [(ngModel)]="user.role" required>
+        <select class="usr-input" name="role" [(ngModel)]="user.role" required (ngModelChange)="onRoleChange()">
           <option value="">Seleccionar rol</option>
           <option value="Administrador">Administrador</option>
           <option value="Recepcionista">Recepcionista</option>
         </select>
       </div>
 
+      <!-- DROPDOWN CÉDULA — solo si es Recepcionista -->
+      @if(user.role === 'Recepcionista') {
+      <div class="usr-form-group">
+        <label class="usr-label">Recepcionista <span class="usr-required">*</span></label>
+        <select class="usr-input" name="cedula" [(ngModel)]="user.cedula" [required]="user.role === 'Recepcionista'">
+          <option value="" disabled selected>Seleccionar recepcionista</option>
+          @for(r of recepcionistas; track r.cedula) {
+          <option [value]="r.cedula">{{ r.nombre }} {{ r.apellidos }} — {{ r.cedula }}</option>
+          }
+        </select>
+      </div>
+      }
+
       <div class="usr-form-group usr-form-group-full">
         <label class="usr-label">Foto de perfil</label>
         <div class="usr-upload-area" (click)="fileInput.click()">
           @if(imagePreview) {
-            <img [src]="imagePreview" class="usr-upload-preview" />
+          <img [src]="imagePreview" class="usr-upload-preview" />
           } @else {
-            <i class="fa-solid fa-cloud-arrow-up usr-upload-icon"></i>
-            <span class="usr-upload-text">Haz clic para subir una imagen</span>
-            <span class="usr-upload-hint">PNG, JPG hasta 5MB</span>
+          <i class="fa-solid fa-cloud-arrow-up usr-upload-icon"></i>
+          <span class="usr-upload-text">Haz clic para subir una imagen</span>
+          <span class="usr-upload-hint">PNG, JPG hasta 5MB</span>
           }
         </div>
-        <input #fileInput type="file" accept="image/*" style="display:none"
-          (change)="onFileSelected($event)" />
+        <input #fileInput type="file" accept="image/*" style="display:none" (change)="onFileSelected($event)" />
       </div>
 
     </div>
@@ -66,28 +78,13 @@
       </button>
       <button type="submit" class="usr-btn-primary" [disabled]="userForm.invalid || loading">
         @if(loading) {
-          <i class="fa-solid fa-spinner fa-spin"></i> Guardando...
+        <i class="fa-solid fa-spinner fa-spin"></i> Guardando...
         } @else {
-          <i class="fa-solid fa-floppy-disk"></i>
-          {{ editMode ? 'Actualizar' : 'Crear Usuario' }}
+        <i class="fa-solid fa-floppy-disk"></i>
+        {{ editMode ? 'Actualizar' : 'Crear Usuario' }}
         }
       </button>
     </div>
 
-    <!-- @if(status === 0) {
-      <div class="usr-alert usr-alert-success">
-        <i class="fa-solid fa-circle-check"></i> Usuario guardado correctamente.
-      </div>
-    }
-    @if(status === 1) {
-      <div class="usr-alert usr-alert-error">
-        <i class="fa-solid fa-circle-exclamation"></i> El correo ya está registrado.
-      </div>
-    }
-    @if(status === 2) {
-      <div class="usr-alert usr-alert-error">
-        <i class="fa-solid fa-circle-exclamation"></i> Error al guardar el usuario.
-      </div>
-    } -->
   </form>
 </div>
