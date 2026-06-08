@@ -1,0 +1,235 @@
+body {
+  background: #f5f7fb;
+}
+
+.metric-card,
+.table-card,
+.filters-card,
+.side-card {
+  border: 0;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  background: #fff;
+}
+
+.metric-card {
+  min-height: 120px;
+}
+
+.metric-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+}
+
+.icon-blue {
+  background: #e8f1ff;
+  color: #0d6efd;
+}
+
+.icon-green {
+  background: #e8f8ee;
+  color: #16a34a;
+}
+
+.icon-yellow {
+  background: #fff6dd;
+  color: #f0ad00;
+}
+
+.icon-red {
+  background: #fde8eb;
+  color: #dc3545;
+}
+
+.btn-add {
+  height: 48px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.filters-card .form-control,
+.filters-card .form-select,
+.filters-card .btn,
+.filters-card .input-group-text {
+  height: 46px;
+  border-radius: 10px;
+}
+
+.filters-card .input-group-text {
+  background: #fff;
+}
+
+.table thead th {
+  background: #f8f9fc;
+  color: #071b3a;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 16px 12px;
+  border-bottom: 1px solid #edf0f5;
+}
+
+.table tbody td {
+  padding: 16px 12px;
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+.table tbody tr:hover {
+  background: #fafcff;
+}
+
+.status-badge {
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-badge span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.status-active {
+  background: #e7f7ef;
+  color: #16a34a;
+}
+
+.status-active span {
+  background: #16a34a;
+}
+
+.status-next {
+  background: #fff3cd;
+  color: #f0ad00;
+}
+
+.status-next span {
+  background: #f0ad00;
+}
+
+.status-inactive {
+  background: #fde8eb;
+  color: #dc3545;
+}
+
+.status-inactive span {
+  background: #dc3545;
+}
+
+.action-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  padding: 0;
+  transition: 0.2s;
+}
+
+.btn-view,
+.btn-edit {
+  border: 1px solid #0d6efd;
+  color: #0d6efd;
+  background: #fff;
+}
+
+.btn-view:hover,
+.btn-edit:hover {
+  background: #0d6efd;
+  color: #fff;
+}
+
+.btn-delete {
+  border: 1px solid #dc3545;
+  color: #dc3545;
+  background: #fff;
+}
+
+.btn-delete:hover {
+  background: #dc3545;
+  color: #fff;
+}
+
+.side-card .card-header {
+  background: #fff;
+  border-bottom: 1px solid #edf0f5;
+  padding: 16px;
+  font-weight: 700;
+}
+
+.list-group-item {
+  border-color: #edf0f5;
+  padding: 16px;
+}
+
+.list-group-item i {
+  font-size: 20px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 6px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  padding: 6px 10px;
+  margin-left: 8px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  border-radius: 8px !important;
+  margin: 0 2px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background: #0d6efd !important;
+  color: #fff !important;
+  border: 0 !important;
+}
+
+.dataTables_wrapper .dataTables_info {
+  margin-top: 14px;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+  margin-top: 10px;
+}
+
+.btn-success {
+  border: 1px solid #198754;
+  color: #198754;
+  background: white;
+}
+
+.btn-success:hover {
+  background: #198754;
+  color: white;
+}
+
+.btn-activate {
+  border: 1px solid #198754;
+  color: #198754;
+  background: #fff;
+}
+
+.btn-activate:hover {
+  background: #198754;
+  color: #fff;
+}
+
+.btn-activate:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
