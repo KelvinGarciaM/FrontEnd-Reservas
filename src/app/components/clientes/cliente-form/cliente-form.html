@@ -1,0 +1,103 @@
+<div class="cl-card cl-form-card">
+  <div class="cl-card-header">
+    <h3 class="cl-card-title">
+      <i class="fa-solid fa-user-plus"></i>
+      {{ editingCliente ? 'Editar Cliente' : 'Nuevo Cliente' }}
+    </h3>
+
+    <button class="cl-btn-icon" type="button" (click)="closeForm()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <form #clienteForm="ngForm" (ngSubmit)="saveCliente()">
+    <div class="cl-form-grid">
+
+      <div class="cl-form-group">
+        <label class="cl-label">Cédula <span class="cl-required">*</span></label>
+        <input
+          type="text"
+          class="cl-input"
+          placeholder="Ej: 10101010"
+          name="cedula"
+          [(ngModel)]="cliente.cedula"
+          [disabled]="editingCliente !== null"
+          required />
+      </div>
+
+      <div class="cl-form-group">
+        <label class="cl-label">Tipo Cliente <span class="cl-required">*</span></label>
+        <select
+          class="cl-input"
+          name="idTipoCliente"
+          [(ngModel)]="cliente.idTipoCliente"
+          required>
+          <option [ngValue]="null">Seleccionar tipo cliente</option>
+
+          @for(tc of tiposCliente; track tc.idTipoCliente) {
+            <option [ngValue]="tc.idTipoCliente">
+              {{ tc.nombreTipoC }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="cl-form-group">
+        <label class="cl-label">Nombre <span class="cl-required">*</span></label>
+        <input
+          type="text"
+          class="cl-input"
+          placeholder="Nombre"
+          name="nombre"
+          [(ngModel)]="cliente.nombre"
+          required />
+      </div>
+
+      <div class="cl-form-group">
+        <label class="cl-label">Apellidos <span class="cl-required">*</span></label>
+        <input
+          type="text"
+          class="cl-input"
+          placeholder="Apellidos"
+          name="apellidos"
+          [(ngModel)]="cliente.apellidos"
+          required />
+      </div>
+
+      <div class="cl-form-group">
+        <label class="cl-label">Teléfono <span class="cl-required">*</span></label>
+        <input
+          type="text"
+          class="cl-input"
+          placeholder="Ej: 8888-1111"
+          name="telefono"
+          [(ngModel)]="cliente.telefono"
+          required />
+      </div>
+
+      <div class="cl-form-group cl-form-group-full">
+        <label class="cl-label">Dirección <span class="cl-required">*</span></label>
+        <textarea
+          class="cl-input cl-textarea"
+          placeholder="Dirección del cliente"
+          name="direccion"
+          [(ngModel)]="cliente.direccion"
+          required>
+        </textarea>
+      </div>
+
+    </div>
+
+    <div class="cl-form-actions">
+      <button type="button" class="cl-btn-secondary" (click)="cliente = editingCliente ? {...editingCliente} : nuevoCliente()">
+        <i class="fa-solid fa-rotate-left"></i>
+        Limpiar
+      </button>
+
+      <button type="submit" class="cl-btn-primary" [disabled]="clienteForm.invalid">
+        <i class="fa-solid fa-floppy-disk"></i>
+        {{ editingCliente ? 'Actualizar' : 'Crear Cliente' }}
+      </button>
+    </div>
+  </form>
+</div>

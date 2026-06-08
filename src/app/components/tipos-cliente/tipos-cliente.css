@@ -1,0 +1,71 @@
+.tc-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tc-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tc-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 4px;
+}
+
+.tc-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.tc-breadcrumb i {
+  font-size: 10px;
+}
+
+.tc-breadcrumb-active {
+  color: #2563eb;
+}
+
+.tc-btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.tc-btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.tc-btn-delete {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.tc-btn-delete:hover {
+  background: #fecaca;
+}
+
+.tc-btn-activate {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.tc-btn-activate:hover {
+  background: #dcfce7;
+}

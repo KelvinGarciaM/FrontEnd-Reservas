@@ -34,13 +34,11 @@
         <div class="hl-nav-section">
 
             @if(authService.currentUser()?.role === 'Administrador') {
-            <button class="hl-nav-item hl-sub-toggle"
-                    [class.hl-active]="cfgOpen"
-                    (click)="cfgOpen = !cfgOpen">
+            <button class="hl-nav-item hl-sub-toggle" [class.hl-active]="cfgOpen" (click)="cfgOpen = !cfgOpen">
                 <i class="fa-solid fa-gear"></i>
                 <span class="hl-nav-label">Configuración</span>
                 <i class="fa-solid fa-chevron-down hl-chevron"
-                   [style.transform]="cfgOpen ? 'rotate(180deg)' : 'rotate(0deg)'"></i>
+                    [style.transform]="cfgOpen ? 'rotate(180deg)' : 'rotate(0deg)'"></i>
             </button>
 
             <div class="hl-submenu" [class.hl-submenu-open]="cfgOpen">
@@ -55,6 +53,10 @@
                 <a routerLink="/usuarios" routerLinkActive="hl-sub-active" class="hl-sub-item">
                     <i class="fa-solid fa-user-group"></i>
                     <span>Usuarios</span>
+                </a>
+                <a routerLink="/tipos-cliente" routerLinkActive="hl-sub-active" class="hl-sub-item">
+                    <i class="fa-solid fa-address-card"></i>
+                    <span>Tipos Cliente</span>
                 </a>
                 <a routerLink="/recepcionistas" routerLinkActive="hl-sub-active" class="hl-sub-item">
                     <i class="fa-solid fa-id-badge"></i>
@@ -81,8 +83,8 @@
         <header class="hl-header">
             <div class="hl-header-left">
                 <i class="fa-solid fa-bars hl-menu-icon" (click)="toggleSidebar()"></i>
-               
-               
+
+
             </div>
 
             <div class="hl-header-right">

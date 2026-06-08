@@ -8,6 +8,8 @@ import { authGuard, adminGuard } from './core/guards/auth-guard';
 import { PublicLayoutComponent } from './layouts/public-layout/public-layout';
 import { PrivateLayoutComponent } from './layouts/private-layout/private-layout';
 import { UsersComponent } from './components/users/users';
+import { ClientesComponent } from './components/clientes/clientes';
+import { TiposClienteComponent } from './components/tipos-cliente/tipos-cliente';
 
 export const routes: Routes = [
 
@@ -31,6 +33,8 @@ export const routes: Routes = [
 
       // solo admin
       { path: 'usuarios', component: UsersComponent, canActivate: [adminGuard] },
+      { path: 'tipos-cliente', component: TiposClienteComponent},
+      { path: 'clientes', component:ClientesComponent}
     ]
   },
 

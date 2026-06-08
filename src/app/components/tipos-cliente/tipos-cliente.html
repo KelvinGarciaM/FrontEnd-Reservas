@@ -1,0 +1,38 @@
+<div class="tc-page">
+
+  <div class="tc-page-header">
+    <div>
+      <h2 class="tc-title">Tipos de Cliente</h2>
+
+      <div class="tc-breadcrumb">
+        <span>Configuración</span>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span class="tc-breadcrumb-active">Tipos de Cliente</span>
+      </div>
+    </div>
+
+    <button class="tc-btn-primary" (click)="openCreate()">
+      <i class="fa-solid fa-plus"></i>
+      Nuevo Tipo Cliente
+    </button>
+  </div>
+
+  @if(showForm) {
+
+    <app-tipo-cliente-form
+      [editingTipoCliente]="editingTipoCliente"
+      (formClosed)="closeForm()"
+      (tipoClienteSaved)="onTipoClienteSaved()">
+    </app-tipo-cliente-form>
+
+  } @else {
+    <app-tipo-cliente-table
+      [tiposCliente]="filteredTiposCliente"
+      (editTipoCliente)="openEdit($event)"
+      (toggleEstado)="onToggleEstado($event)"
+      (searchChanged)="onSearch($event)">
+    </app-tipo-cliente-table>
+
+  }
+
+</div>

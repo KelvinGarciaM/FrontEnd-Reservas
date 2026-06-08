@@ -1,0 +1,39 @@
+<div class="cl-page">
+
+    <div class="cl-page-header">
+        <div>
+            <h2 class="cl-title">Clientes</h2>
+
+            <div class="cl-breadcrumb">
+                <span>Reservas</span>
+                <i class="fa-solid fa-chevron-right"></i>
+                <span class="cl-breadcrumb-active">Clientes</span>
+            </div>
+        </div>
+
+        <button class="cl-btn-primary" (click)="openCreate()">
+            <i class="fa-solid fa-plus"></i>
+            Nuevo Cliente
+        </button>
+    </div>
+
+    @if(showForm) {
+
+    <app-cliente-form 
+    [editingCliente]="editingCliente" 
+    (formClosed)="closeForm()" 
+    (clienteSaved)="onClienteSaved()">
+    </app-cliente-form>
+
+    } @else {
+
+    <app-cliente-table 
+    [clientes]="filteredClientes" 
+    (editCliente)="openEdit($event)"
+    (toggleEstado)="onToggleEstado($event)" 
+    (searchChanged)="onSearch($event)">
+    </app-cliente-table>
+
+    }
+
+</div>
