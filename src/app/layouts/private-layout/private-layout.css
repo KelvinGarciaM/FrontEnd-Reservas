@@ -1,0 +1,365 @@
+/* WRAPPER GENERAL */
+.hl-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ──────────────── SIDEBAR ──────────────── */
+.hl-sidebar {
+  width: 220px;
+  min-height: 100vh;
+  background: #1a2235;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+}
+
+.hl-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.hl-logo-icon {
+  width: 32px;
+  height: 32px;
+  background: #2563eb;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 15px;
+}
+
+.hl-logo-text {
+  color: #fffffffd;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.hl-nav-section {
+  padding: 12px 8px;
+}
+
+.hl-nav-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 0 16px;
+}
+
+.hl-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  color: rgba(255,255,255,0.80);
+  font-size: 13.5px;
+  border-radius: 7px;
+  margin-bottom: 1px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.hl-nav-item:hover {
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+}
+
+.hl-nav-item.hl-active {
+  background: #2563eb;
+  color: #fff;
+}
+
+.hl-nav-item i {
+  font-size: 15px;
+  width: 18px;
+  text-align: center;
+}
+
+.hl-sidebar-bottom {
+  margin-top: auto;
+  padding: 12px 8px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.hl-logout {
+  color: rgba(255, 100, 100, 0.7) !important;
+}
+
+.hl-logout:hover {
+  color: #f87171 !important;
+  background: rgba(248,113,113,0.1) !important;
+}
+
+/* ──────────────── BODY DERECHO ──────────────── */
+.hl-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #f8fafc;
+  overflow: hidden;
+}
+
+/* ──────────────── HEADER ──────────────── */
+.hl-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 56px;
+  background: #fff;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  flex-shrink: 0;
+}
+
+.hl-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hl-menu-icon {
+  font-size: 16px;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.hl-header-divider {
+  display: inline-block;
+  width: 1px;
+  height: 20px;
+  background: rgba(0,0,0,0.1);
+  margin: 0 4px;
+}
+
+.hl-header-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.hl-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hl-icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #64748b;
+  position: relative;
+}
+
+.hl-icon-btn:hover {
+  background: #f1f5f9;
+}
+
+.hl-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ef4444;
+  border: 1.5px solid #fff;
+}
+
+.hl-user-chip {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 4px 10px 4px 4px;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 20px;
+  cursor: pointer;
+  background: transparent;
+}
+
+.hl-user-chip:hover {
+  background: #f1f5f9;
+}
+
+.hl-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.hl-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.hl-user-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1e293b;
+  line-height: 1;
+}
+
+.hl-user-role {
+  font-size: 11px;
+  color: #64748b;
+  line-height: 1;
+}
+
+.hl-chevron {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* ──────────────── MAIN ──────────────── */
+.hl-main {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+/* ──────────────── SIDEBAR COLAPSADO ──────────────── */
+.hl-sidebar {
+  transition: width 0.25s ease;
+  overflow: hidden;
+}
+
+.hl-nav-label {
+  transition: opacity 0.2s ease, width 0.2s ease;
+  white-space: nowrap;
+}
+
+.hl-logo-text {
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+/* Cuando está colapsado */
+.hl-collapsed .hl-sidebar {
+  width: 56px;
+}
+
+.hl-collapsed .hl-nav-label {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.hl-collapsed .hl-logo-text {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.hl-collapsed .hl-nav-item {
+  justify-content: center;
+  padding: 9px 0;
+}
+
+.hl-collapsed .hl-logo {
+  justify-content: center;
+  padding: 20px 0;
+}
+/* ──────────────── SUBMENÚ CONFIGURACIÓN ──────────────── */
+.hl-sub-toggle {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  color: rgba(255,255,255,0.80);
+  font-size: 13.5px;
+  border-radius: 7px;
+  margin-bottom: 1px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.hl-sub-toggle:hover {
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.85);
+}
+
+.hl-sub-toggle.hl-active {
+  color: rgba(255,255,255,0.85);
+}
+
+.hl-sub-toggle i.hl-chevron {
+  margin-left: auto;
+  font-size: 11px;
+  transition: transform 0.2s ease;
+}
+
+.hl-submenu {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.25s ease;
+}
+
+.hl-submenu-open {
+  max-height: 220px;
+}
+
+.hl-sub-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px 8px 36px;
+  color: rgba(255,255,255,0.45);
+  font-size: 13px;
+  border-radius: 7px;
+  margin-bottom: 1px;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.hl-sub-item:hover {
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+}
+
+.hl-sub-item.hl-sub-active {
+  background: rgba(37,99,235,0.4);
+  color: #fff;
+}
+
+.hl-sub-item i {
+  font-size: 14px;
+  width: 18px;
+  text-align: center;
+}
+
+/* ocultar submenú cuando sidebar está colapsado */
+.hl-collapsed .hl-submenu {
+  display: none;
+}
+
+.hl-collapsed .hl-sub-toggle .hl-chevron {
+  display: none;
+}

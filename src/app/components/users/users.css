@@ -1,0 +1,48 @@
+.usr-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.usr-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.usr-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 4px;
+}
+
+.usr-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.usr-breadcrumb i { font-size: 10px; }
+
+.usr-breadcrumb-active { color: #2563eb; }
+
+/* Botón "Nuevo Usuario" del header */
+.usr-btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.usr-btn-primary:hover { background: #1d4ed8; }

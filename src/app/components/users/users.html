@@ -1,0 +1,34 @@
+<div class="usr-page">
+
+  <div class="usr-page-header">
+    <div>
+      <h2 class="usr-title">Usuarios</h2>
+      <div class="usr-breadcrumb">
+        <span>Configuración</span>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span class="usr-breadcrumb-active">Usuarios</span>
+      </div>
+    </div>
+    <button class="usr-btn-primary" (click)="openCreate()">
+      <i class="fa-solid fa-plus"></i> Nuevo Usuario
+    </button>
+  </div>
+
+  @if(showForm) {
+    <app-user-form
+      [editingUser]="editingUser"
+      (formClosed)="closeForm()"
+      (userSaved)="onUserSaved()">
+    </app-user-form>
+  } @else {
+    <app-user-table
+      [users]="filteredUsers"
+      (editUser)="openEdit($event)"
+      (deleteUser)="onDelete($event)"
+      (searchChanged)="onSearch($event)">
+    </app-user-table>
+  }
+
+  
+
+</div>

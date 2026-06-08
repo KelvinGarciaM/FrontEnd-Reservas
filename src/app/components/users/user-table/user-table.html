@@ -1,0 +1,67 @@
+<div class="usr-card">
+  <div class="usr-card-header">
+    <h3 class="usr-card-title">
+      <i class="fa-solid fa-users"></i> Lista de usuarios
+    </h3>
+    <div class="usr-search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" placeholder="Buscar usuario..." [(ngModel)]="searchTerm" (input)="onSearch()" />
+    </div>
+  </div>
+
+  <div class="usr-table-wrapper">
+    <table class="usr-table">
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Correo</th>
+          <th>Rol</th>
+          <!-- <th>Estado</th> -->
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(u of _users; track u.id) {
+        <tr>
+          <td>
+            <div class="usr-user-cell">
+              @if(u.image && imageMap[u.id!]) {
+              <img [src]="imageMap[u.id!]" alt="avatar" />
+              } @else {
+              <div class="usr-avatar-sm">{{ getInitials(u.name) }}</div>
+              }
+              <span>{{ u.name }}</span>
+            </div>
+          </td>
+          <td>{{ u.email }}</td>
+          <td>
+            <span class="usr-badge" [class.usr-badge-admin]="u.role === 'Administrador'">
+              {{ u.role }}
+            </span>
+          </td>
+          <!-- <td>
+            <span class="usr-status" [class.usr-status-active]="u.estado === 1"
+              [class.usr-status-inactive]="u.estado === 0">
+              {{ u.estado === 1 ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td> -->
+          <td>
+            <div class="usr-actions">
+              <button class="usr-btn-action usr-btn-edit" (click)="editUser.emit(u)" title="Editar">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button class="usr-btn-action usr-btn-delete" (click)="deleteUser.emit(u.id!)" title="Eliminar">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="5" class="usr-empty">No hay usuarios registrados.</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
