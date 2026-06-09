@@ -1,0 +1,70 @@
+<div class="tc-card tc-form-card">
+  <div class="tc-card-header">
+    <h3 class="tc-card-title">
+      <i class="fa-solid fa-address-card"></i>
+      {{ editingTipoCliente ? 'Editar Tipo Cliente' : 'Nuevo Tipo Cliente' }}
+    </h3>
+
+    <button class="tc-btn-icon" type="button" (click)="closeForm()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <form #tipoClienteForm="ngForm" (ngSubmit)="saveTipoCliente()">
+    <div class="tc-form-grid">
+
+      <div class="tc-form-group">
+        <label class="tc-label">
+          Nombre <span class="tc-required">*</span>
+        </label>
+        <input
+          type="text"
+          class="tc-input"
+          placeholder="Ej: Premium"
+          name="nombreTipoC"
+          [(ngModel)]="tipoCliente.nombreTipoC"
+          required />
+      </div>
+
+      <div class="tc-form-group">
+        <label class="tc-label">
+          Descuento base (%) <span class="tc-required">*</span>
+        </label>
+        <input
+          type="number"
+          class="tc-input"
+          placeholder="Ej: 10"
+          name="descuentoBase"
+          [(ngModel)]="tipoCliente.descuentoBase"
+          min="0"
+          required />
+      </div>
+
+      <div class="tc-form-group tc-form-group-full">
+        <label class="tc-label">
+          Descripción <span class="tc-required">*</span>
+        </label>
+        <textarea
+          class="tc-input tc-textarea"
+          placeholder="Descripción del tipo de cliente"
+          name="descripcion"
+          [(ngModel)]="tipoCliente.descripcion"
+          required>
+        </textarea>
+      </div>
+
+    </div>
+
+    <div class="tc-form-actions">
+      <button type="button" class="tc-btn-secondary" (click)="tipoCliente = editingTipoCliente ? {...editingTipoCliente} : nuevoTipoCliente()">
+        <i class="fa-solid fa-rotate-left"></i>
+        Limpiar
+      </button>
+
+      <button type="submit" class="tc-btn-primary" [disabled]="tipoClienteForm.invalid">
+        <i class="fa-solid fa-floppy-disk"></i>
+        {{ editingTipoCliente ? 'Actualizar' : 'Crear Tipo Cliente' }}
+      </button>
+    </div>
+  </form>
+</div>

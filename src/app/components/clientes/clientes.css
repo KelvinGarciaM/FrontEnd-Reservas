@@ -1,0 +1,53 @@
+.cl-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cl-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cl-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 4px;
+}
+
+.cl-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.cl-breadcrumb i {
+  font-size: 10px;
+}
+
+.cl-breadcrumb-active {
+  color: #2563eb;
+}
+
+.cl-btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cl-btn-primary:hover {
+  background: #1d4ed8;
+}

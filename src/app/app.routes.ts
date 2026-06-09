@@ -13,6 +13,8 @@ import { TarifaList } from './components/tarifa/tarifa-list/tarifa-list';
 import { TarifaEdit } from './components/tarifa/tarifa-edit/tarifa-edit';
 
 import { UsersComponent } from './components/users/users';
+import { ClientesComponent } from './components/clientes/clientes';
+import { TiposClienteComponent } from './components/tipos-cliente/tipos-cliente';
 
 
 export const routes: Routes = [
@@ -46,6 +48,8 @@ export const routes: Routes = [
 
       // solo admin
       { path: 'usuarios', component: UsersComponent, canActivate: [adminGuard] },
+      { path: 'tipos-cliente', component: TiposClienteComponent},
+      { path: 'clientes', component:ClientesComponent}
     ]
   },
 
