@@ -1,0 +1,170 @@
+@if (tarifaCargada()) {
+  <div class="container-fluid p-4 bg-light min-vh-100">
+    <div class="mb-4">
+      <h2 class="fw-bold mb-1">Editar Tarifa</h2>
+
+      <nav>
+        <span class="text-primary">Tarifas</span>
+        <span class="mx-2 text-muted">›</span>
+        <span class="text-muted">Editar Tarifa</span>
+      </nav>
+    </div>
+
+    <form #tarifaForm="ngForm" (ngSubmit)="onSubmit(tarifaForm)">
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-4">
+            <i class="bi bi-card-list text-primary me-2"></i>
+            Información de la tarifa
+          </h5>
+
+          <div class="row g-4">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                Nombre de la tarifa <span class="text-danger">*</span>
+              </label>
+
+              <input
+                type="text"
+                name="nombreTarifa"
+                class="form-control"
+                [(ngModel)]="tarifa.nombreTarifa"
+                required
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                Tipo de habitación <span class="text-danger">*</span>
+              </label>
+
+              <select
+                class="form-select"
+                name="idTipoHabitacion"
+                [(ngModel)]="tarifa.idTipoHabitacion"
+                required
+              >
+                <option [ngValue]="null" disabled>Seleccionar tipo de habitación</option>
+
+                @for (th of tiposHabitacion(); track th.idtipohabitacion) {
+                  <option [ngValue]="th.idtipohabitacion">
+                    {{ th.nombretipohab }}
+                  </option>
+                }
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold"> Descripción </label>
+
+              <textarea
+                rows="4"
+                class="form-control"
+                name="descripcion"
+                [(ngModel)]="tarifa.descripcion"
+              >
+              </textarea>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                Precio base <span class="text-danger">*</span>
+              </label>
+
+              <div class="input-group">
+                <span class="input-group-text">₡</span>
+
+                <input
+                  type="number"
+                  class="form-control"
+                  name="precioBase"
+                  [(ngModel)]="tarifa.precioBase"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-4">
+            <i class="bi bi-calendar-week text-primary me-2"></i>
+            Vigencia de la tarifa
+          </h5>
+
+          <div class="row g-4">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                Fecha de inicio <span class="text-danger">*</span>
+              </label>
+
+              <input
+                type="date"
+                class="form-control"
+                name="fechaInicio"
+                [(ngModel)]="tarifa.fechaInicio"
+                [min]="fechaActual"
+                (ngModelChange)="calcularEstado()"
+                required
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                Fecha de fin <span class="text-danger">*</span>
+              </label>
+
+              <input
+                type="date"
+                class="form-control"
+                name="fechaFin"
+                [(ngModel)]="tarifa.fechaFin"
+                [min]="tarifa.fechaInicio || fechaActual"
+                (ngModelChange)="calcularEstado()"
+                required
+              />
+            </div>
+          </div>
+
+          @if (errorFechas) {
+            <small class="text-danger d-block mt-3">
+              La fecha de inicio no puede ser mayor que la fecha de fin.
+            </small>
+          }
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-4">
+            <i class="bi bi-shield-check text-primary me-2"></i>
+            Estado de la tarifa
+          </h5>
+
+          <input type="text" class="form-control" [value]="getEstadoTexto()" readonly />
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-secondary px-4" routerLink="/tarifa-list">
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary px-4"
+          [disabled]="tarifaForm.invalid || errorFechas"
+        >
+          <i class="bi bi-floppy me-2"></i>
+          Actualizar Tarifa
+        </button>
+      </div>
+    </form>
+  </div>
+} @else {
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">Cargando tarifa...</div>
+  </div>
+}

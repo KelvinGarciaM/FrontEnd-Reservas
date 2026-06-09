@@ -34,7 +34,8 @@ export class UsersComponent implements OnInit {
         this.users = data.map((u: any) => ({
           ...u,
           image: u.image?.String || null,
-          role:  u.role?.String  || u.role
+          role:  u.role?.String  || u.role,
+           cedula: u.cedula?.String || u.cedula || ''
         }));
         this.filteredUsers = [...this.users];
         this.cdr.detectChanges(); 
@@ -49,13 +50,21 @@ export class UsersComponent implements OnInit {
     this.cdr.detectChanges(); 
   }
 
-  openEdit(user: User): void {
-    this.editingUser = { ...user, password: '' };
-    this.showForm    = true;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    this.cdr.detectChanges(); 
-  }
+  // openEdit(user: User): void {
+  //   this.editingUser = { ...user, password: '' };
+  //   this.showForm    = true;
+  //   window.scrollTo({ top: 0, behavior: 'smooth' });
+  //   this.cdr.detectChanges(); 
+  // }
 
+  openEdit(user: User): void {
+  console.log('user completo:', user);
+  console.log('estado:', user.estado, typeof user.estado);
+  this.editingUser = { ...user, password: '' };
+  this.showForm    = true;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  this.cdr.detectChanges();
+}
   closeForm(): void {
     this.showForm    = false;
     this.editingUser = null;

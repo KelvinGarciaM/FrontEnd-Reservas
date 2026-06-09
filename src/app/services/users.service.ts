@@ -15,59 +15,42 @@ export class UserService {
     this.url = enviroment.apiUrl + 'users';
   }
 
-
-  private getAuthHeaders() {
-    const token = localStorage.getItem('token');
-
-    return {
-      headers: new HttpHeaders({
-        'Authorization': `Bearer ${token}`
-      })
-    };
-  }
-
   getUsers(): Observable<any> {
-    return this._http.get(this.url, this.getAuthHeaders());
+    return this._http.get(this.url);
   }
 
   register(user: User): Observable<any> {
-    return this._http.post(this.url, user, this.getAuthHeaders());
+    return this._http.post(this.url, user);
   }
 
-  updateUser(user: User): Observable<any> {
-    return this._http.put(this.url, user, this.getAuthHeaders());
-  }
 
-  deleteUser(id: number): Observable<any> {
-  return this._http.delete(`${this.url}/${id}`, this.getAuthHeaders());
+
+updateUser(user: User): Observable<any> {
+  
+  return this._http.put(`${this.url}/${user.id}`, user);
 }
 
-  uploadImage(file: File): Observable<any> {
+  deleteUser(id: number): Observable<any> {
+    return this._http.delete(`${this.url}/${id}`);
+  }
 
+  uploadImage(file: File): Observable<any> {
     const formData = new FormData();
     formData.append('file0', file);
-
-    const token = localStorage.getItem('token');
-
-    return this._http.post(
-      this.url + '/upload',
-      formData,
-      {
-        headers: new HttpHeaders({
-          'Authorization': `Bearer ${token}`
-        })
-      }
-    );
+    return this._http.post(`${this.url}/upload`, formData);
+    // el interceptor agrega el token, no se pone Content-Type
+    // porque FormData lo setea automáticamente con el boundary
   }
+
   getImageUrl(img: string | null | undefined): string {
     if (!img) return '';
-    return `${enviroment.apiUrl}users/download/${img}`; 
+    return `${enviroment.apiUrl}users/download/${img}`;
   }
+
   getImageBlob(filename: string): Observable<string> {
     return this._http.get(
       `${enviroment.apiUrl}users/download/${filename}`,
       { responseType: 'blob' }
-      // el interceptor agrega el token automáticamente 
     ).pipe(
       switchMap(blob => new Observable<string>(observer => {
         const reader = new FileReader();
