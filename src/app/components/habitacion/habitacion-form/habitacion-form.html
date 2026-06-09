@@ -1,0 +1,48 @@
+<div class="usr-card usr-form-card">
+    <div class="usr-card-header">
+        <h3 class="usr-card-title">
+            <i class="fa-solid fa-bed"></i>
+            {{ editMode ? 'Editar habitación' : 'Registrar habitación' }}
+        </h3>
+
+        <button class="usr-btn-icon" type="button" (click)="cancel()">✖</button>
+    </div>
+
+    <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+        <div class="usr-form-grid">
+            <div>
+                <label class="usr-label">Tipo habitación <span class="usr-required">*</span></label>
+                <select class="usr-input" name="idTipoHab" [(ngModel)]="habitacion.idTipoHab" required>
+                    <option [ngValue]="null">Seleccione un tipo</option>
+                    <option *ngFor="let tipo of tiposHabitacion" [ngValue]="tipo.idTipoHabitacion">
+                        {{ tipo.nombreTipoHab }}
+                    </option>
+                </select>
+            </div>
+
+            <div>
+                <label class="usr-label">Número habitación <span class="usr-required">*</span></label>
+                <input class="usr-input" type="text" name="numeroHabitacion" [(ngModel)]="habitacion.numeroHabitacion"
+                    required />
+            </div>
+
+            <div *ngIf="editMode">
+                <label class="usr-label">Estado</label>
+                <select class="usr-input" name="estado" [(ngModel)]="habitacion.estado">
+                    <option [ngValue]="1">Activa</option>
+                    <option [ngValue]="0">Inactiva</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="usr-form-actions">
+            <button type="button" class="usr-btn-secondary" (click)="cancel()" [disabled]="loading">
+                Cancelar
+            </button>
+
+            <button type="submit" class="usr-btn-primary" [disabled]="loading">
+                {{ editMode ? 'Actualizar' : 'Guardar' }}
+            </button>
+        </div>
+    </form>
+</div>

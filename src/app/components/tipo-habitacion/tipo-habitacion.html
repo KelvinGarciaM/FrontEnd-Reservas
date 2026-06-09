@@ -1,0 +1,24 @@
+<div class="usr-page">
+    <div class="usr-page-header">
+        <div>
+            <h2 class="usr-title">Tipos de habitación</h2>
+            <div class="usr-breadcrumb">
+                <span>Configuración</span>
+                <i class="fa-solid fa-chevron-right"></i>
+                <span class="usr-breadcrumb-active">Tipos de habitación</span>
+            </div>
+        </div>
+
+        <button class="usr-btn-primary" (click)="openCreate()">
+            <i class="fa-solid fa-plus"></i> Nuevo tipo
+        </button>
+    </div>
+
+    <app-tipo-habitacion-form *ngIf="mostrarFormulario" [editingTipo]="editingTipo" (formClosed)="closeForm()"
+        (tipoSaved)="onTipoSaved()">
+    </app-tipo-habitacion-form>
+
+    <app-tipo-habitacion-table *ngIf="!mostrarFormulario" [tipos]="filteredTipos" (editTipo)="openEdit($event)"
+        (toggleEstado)="onToggleEstado($event)" (searchChanged)="onSearch($event)">
+    </app-tipo-habitacion-table>
+</div>

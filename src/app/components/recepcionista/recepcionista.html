@@ -1,0 +1,32 @@
+<div class="usr-page">
+    <div class="usr-page-header">
+        <div>
+            <h1 class="usr-title">Recepcionistas</h1>
+
+            <div class="usr-breadcrumb">
+                <span>Inicio</span>
+                <i class="fa-solid fa-chevron-right"></i>
+                <span class="usr-breadcrumb-active">Recepcionistas</span>
+            </div>
+        </div>
+
+        <button class="usr-btn-primary" (click)="openCreate()">
+            + Nuevo recepcionista
+        </button>
+    </div>
+
+    <app-recepcionista-form
+        *ngIf="mostrarFormulario"
+        [editingRecepcionista]="editingRecepcionista"
+        (formClosed)="closeForm()"
+        (recepcionistaSaved)="onRecepcionistaSaved()">
+    </app-recepcionista-form>
+
+    <app-recepcionista-table
+        *ngIf="!mostrarFormulario"
+        [recepcionistas]="filteredRecepcionistas"
+        (editRecepcionista)="openEdit($event)"
+        (toggleEstado)="onToggleEstado($event)"
+        (searchChanged)="onSearch($event)">
+    </app-recepcionista-table>
+</div>

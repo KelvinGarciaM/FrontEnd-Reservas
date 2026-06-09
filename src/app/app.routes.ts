@@ -14,6 +14,9 @@ import { TarifaEdit } from './components/tarifa/tarifa-edit/tarifa-edit';
 import { TarifaDetail } from './components/tarifa/tarifa-detail/tarifa-detail';
 
 import { UsersComponent } from './components/users/users';
+import { TipoHabitacionComponent } from './components/tipo-habitacion/tipo-habitacion';
+import { HabitacionComponent } from './components/habitacion/habitacion';
+import { RecepcionistaComponent } from './components/recepcionista/recepcionista';
 import { ClientesComponent } from './components/clientes/clientes';
 import { TiposClienteComponent } from './components/tipos-cliente/tipos-cliente';
 
@@ -44,6 +47,9 @@ export const routes: Routes = [
 
       // solo admin
       { path: 'usuarios', component: UsersComponent, canActivate: [adminGuard] },
+      { path: 'tipos-habitacion', component: TipoHabitacionComponent, canActivate: [adminGuard] },
+      { path: 'habitacion', component: HabitacionComponent, canActivate: [adminGuard] },
+      { path: 'recepcionistas', component: RecepcionistaComponent, canActivate: [adminGuard] },
 
       { path: 'tipos-cliente', component: TiposClienteComponent},
       { path: 'clientes', component:ClientesComponent}

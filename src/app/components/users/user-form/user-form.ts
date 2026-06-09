@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { User } from '../../../models/user';
 import { Recepcionista } from '../../../models/recepcionista';
 import { UserService } from '../../../services/users.service';
-import { RecepcionistasService } from '../../../services/recepcionistas.service';
+import { RecepcionistaService } from '../../../services/recepcionistas.service';
 import { switchMap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 
@@ -30,7 +30,7 @@ export class UserFormComponent implements OnChanges {
 
   constructor(
     private userService:  UserService,
-    private recepService: RecepcionistasService,
+    private recepService: RecepcionistaService,
     private cdr: ChangeDetectorRef
   ) {}
 

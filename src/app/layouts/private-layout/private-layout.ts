@@ -19,7 +19,7 @@ export class PrivateLayoutComponent implements OnInit {
   userImageBase64: string | null = null;
   initials         = '';
 
-  private cfgRoutes = ['/tarifas', '/habitaciones', '/usuarios', '/recepcionistas'];
+  private cfgRoutes = ['/tarifas', '/tipos-habitacion', '/habitacion', '/usuarios', '/recepcionistas'];
 
   constructor(
     public authService: AuthService,
