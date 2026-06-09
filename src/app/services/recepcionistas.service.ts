@@ -1,37 +1,67 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Recepcionista } from '../models/recepcionista';
-import { enviroment } from '../enviroments';
+import { Injectable } from "@angular/core";
+import { enviroment } from "../enviroments";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { Recepcionista } from "../models/recepcionista";
 
 @Injectable({
   providedIn: 'root'
 })
-export class RecepcionistasService {
+export class RecepcionistaService {
 
-  private url: string;
+  private readonly url: string;
 
   constructor(private _http: HttpClient) {
     this.url = enviroment.apiUrl + 'recepcionistas';
   }
 
-  getRecepcionistas(): Observable<Recepcionista[]> {
-    return this._http.get<Recepcionista[]>(this.url);
+  getRecepcionistas(): Observable<any> {
+    return this._http.get(this.url);
   }
 
-  getRecepcionistaByCedula(cedula: string): Observable<Recepcionista> {
-    return this._http.get<Recepcionista>(`${this.url}${cedula}`);
+  getRecepcionistaByCedula(cedula: string): Observable<any> {
+    return this._http.get(`${this.url}/${cedula}`);
   }
 
-  createRecepcionista(r: Recepcionista): Observable<any> {
-    return this._http.post(this.url, r);
+  searchRecepcionistas(term: string): Observable<any> {
+    return this._http.get(`${this.url}/buscar?q=${term}`);
   }
 
-  updateRecepcionista(r: Recepcionista): Observable<any> {
-    return this._http.put(this.url, r);
+  register(recepcionista: Recepcionista): Observable<any> {
+    const body = {
+      cedula: recepcionista.cedula,
+      nombre: recepcionista.nombre,
+      apellidos: recepcionista.apellidos,
+      telefono: recepcionista.telefono,
+      correo: recepcionista.correo
+    };
+
+    return this._http.post(this.url, body);
+  }
+
+  updateRecepcionista(recepcionista: Recepcionista): Observable<any> {
+    const body = {
+      cedula: recepcionista.cedula,
+      nombre: recepcionista.nombre,
+      apellidos: recepcionista.apellidos,
+      telefono: recepcionista.telefono,
+      correo: recepcionista.correo,
+      estado: Number(recepcionista.estado)
+    };
+
+    return this._http.put(this.url, body);
   }
 
   deleteRecepcionista(cedula: string): Observable<any> {
-    return this._http.delete(`${this.url}${cedula}`);
+    return this._http.request('delete', this.url, {
+      body: { cedula }
+    });
   }
+
+  toggleEstado(cedula: string) {
+  return this._http.put(
+    `${this.url}/toggle`,
+    { cedula }
+  );
+}
 }

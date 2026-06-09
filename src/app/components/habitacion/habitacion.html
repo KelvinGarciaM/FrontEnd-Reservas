@@ -1,0 +1,32 @@
+<div class="usr-page">
+    <div class="usr-page-header">
+        <div>
+            <h1 class="usr-title">Habitaciones</h1>
+
+            <div class="usr-breadcrumb">
+                <span>Inicio</span>
+                <i class="fa-solid fa-chevron-right"></i>
+                <span class="usr-breadcrumb-active">Habitaciones</span>
+            </div>
+        </div>
+
+        <button class="usr-btn-primary" (click)="openCreate()">
+            + Nueva habitación
+        </button>
+    </div>
+
+    <app-habitacion-form
+        *ngIf="mostrarFormulario"
+        [editingHabitacion]="editingHabitacion"
+        (formClosed)="closeForm()"
+        (habitacionSaved)="onHabitacionSaved()">
+    </app-habitacion-form>
+
+    <app-habitacion-table
+        *ngIf="!mostrarFormulario"
+        [habitaciones]="filteredHabitaciones"
+        (editHabitacion)="openEdit($event)"
+        (toggleEstado)="onToggleEstado($event)"
+        (searchChanged)="onSearch($event)">
+    </app-habitacion-table>
+</div>

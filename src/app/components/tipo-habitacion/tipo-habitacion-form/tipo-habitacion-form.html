@@ -1,0 +1,67 @@
+<div class="usr-card usr-form-card">
+
+    <div class="usr-card-header">
+        <h3 class="usr-card-title">
+            <i class="fa-solid fa-hotel"></i>
+            {{ editMode ? 'Editar tipo de habitación' : 'Registrar tipo de habitación' }}
+        </h3>
+
+        <button type="button" class="usr-btn-icon" (click)="cancel()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+
+    <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+
+        <div class="usr-form-grid">
+
+            <div>
+                <label class="usr-label">
+                    Nombre del tipo
+                    <span class="usr-required">*</span>
+                </label>
+
+                <input class="usr-input" type="text" name="nombreTipoHab" [(ngModel)]="tipoHabitacion.nombreTipoHab"
+                    required>
+            </div>
+
+            <div>
+                <label class="usr-label">
+                    Capacidad máxima
+                    <span class="usr-required">*</span>
+                </label>
+
+                <input class="usr-input" type="number" name="capacidadMaxima"
+                    [(ngModel)]="tipoHabitacion.capacidadMaxima" required>
+            </div>
+
+            <div class="usr-form-group-full">
+                <label class="usr-label">
+                    Descripción
+                    <span class="usr-required">*</span>
+                </label>
+
+                <input class="usr-input" type="text" name="descripcion" [(ngModel)]="tipoHabitacion.descripcion"
+                    required>
+            </div>
+
+        </div>
+
+        <div class="usr-form-actions">
+
+            <button type="button" class="usr-btn-secondary" (click)="cancel()" [disabled]="loading">
+                Cancelar
+            </button>
+
+            <button type="submit" class="usr-btn-primary" [disabled]="loading">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+
+                {{ editMode ? 'Actualizar' : 'Guardar' }}
+            </button>
+
+        </div>
+
+    </form>
+
+</div>

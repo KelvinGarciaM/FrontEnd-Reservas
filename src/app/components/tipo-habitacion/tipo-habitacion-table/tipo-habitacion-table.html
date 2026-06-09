@@ -1,0 +1,71 @@
+<div class="usr-card">
+    <div class="usr-card-header">
+        <h3 class="usr-card-title">
+            <i class="fa-solid fa-hotel"></i>
+            Lista de tipos de habitación
+        </h3>
+
+        <div class="usr-search-box">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" placeholder="Buscar por nombre o descripción..." [(ngModel)]="searchTerm"
+                (ngModelChange)="onSearch()" />
+        </div>
+    </div>
+
+    <div class="usr-table-wrapper">
+        <table class="usr-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tipo habitación</th>
+                    <th>Descripción</th>
+                    <th>Capacidad</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let item of tipos">
+                    <td>#{{ item.idTipoHabitacion }}</td>
+                    <td>{{ item.nombreTipoHab }}</td>
+                    <td>{{ item.descripcion }}</td>
+                    <td>{{ item.capacidadMaxima }}</td>
+
+                    <td>
+                        <span class="usr-status" [class.usr-status-active]="item.estado === 1"
+                            [class.usr-status-inactive]="item.estado !== 1">
+                            {{ item.estado === 1 ? 'Activo' : 'Inactivo' }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <div class="usr-actions">
+
+                            <button class="usr-btn-action usr-btn-edit" (click)="editTipo.emit(item)">
+                                ✏️
+                            </button>
+
+                            <button *ngIf="item.estado === 1" class="usr-btn-action usr-btn-delete"
+                                (click)="toggleEstado.emit(item)">
+                                <i class="fa-solid fa-user-slash"></i>
+                            </button>
+
+                            <button *ngIf="item.estado === 0" class="usr-btn-action usr-btn-edit"
+                                (click)="toggleEstado.emit(item)">
+                                <i class="fa-solid fa-user-check"></i>
+                            </button>
+
+                        </div>
+                    </td>
+                </tr>
+
+                <tr *ngIf="tipos.length === 0">
+                    <td colspan="6" class="usr-empty">
+                        No hay tipos de habitación registrados
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

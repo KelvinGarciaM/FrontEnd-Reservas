@@ -8,6 +8,9 @@ import { authGuard, adminGuard } from './core/guards/auth-guard';
 import { PublicLayoutComponent } from './layouts/public-layout/public-layout';
 import { PrivateLayoutComponent } from './layouts/private-layout/private-layout';
 import { UsersComponent } from './components/users/users';
+import { TipoHabitacionComponent } from './components/tipo-habitacion/tipo-habitacion';
+import { HabitacionComponent } from './components/habitacion/habitacion';
+import { RecepcionistaComponent } from './components/recepcionista/recepcionista';
 
 export const routes: Routes = [
 
@@ -31,6 +34,9 @@ export const routes: Routes = [
 
       // solo admin
       { path: 'usuarios', component: UsersComponent, canActivate: [adminGuard] },
+      { path: 'tipos-habitacion', component: TipoHabitacionComponent, canActivate: [adminGuard] },
+      { path: 'habitacion', component: HabitacionComponent, canActivate: [adminGuard] },
+      { path: 'recepcionistas', component: RecepcionistaComponent, canActivate: [adminGuard] },
     ]
   },
 

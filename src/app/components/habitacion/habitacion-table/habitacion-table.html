@@ -1,0 +1,61 @@
+<div class="usr-card">
+    <div class="usr-card-header">
+        <h3 class="usr-card-title">
+            <i class="fa-solid fa-bed"></i>
+            Lista de habitaciones
+        </h3>
+
+        <div class="usr-search-box">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" placeholder="Buscar habitación..." [(ngModel)]="searchTerm"
+                (ngModelChange)="onSearch()" />
+        </div>
+    </div>
+
+    <div class="usr-table-wrapper">
+        <table class="usr-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Número</th>
+                    <th>ID Tipo</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let item of habitaciones">
+                    <td>#{{ item.idHabitacion }}</td>
+                    <td>{{ item.numeroHabitacion }}</td>
+                    <td>{{ item.idTipoHab }}</td>
+                    <td>
+                        <span class="usr-status" [class.usr-status-active]="item.estado === 1"
+                            [class.usr-status-inactive]="item.estado !== 1">
+                            {{ item.estado === 1 ? 'Activa' : 'Inactiva' }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="usr-actions">
+                            <button class="usr-btn-action usr-btn-edit" (click)="editHabitacion.emit(item)">✏️</button>
+
+                            <button *ngIf="item.estado === 1" class="usr-btn-action usr-btn-delete"
+                                (click)="toggleEstado.emit(item)">
+                                <i class="fa-solid fa-user-slash"></i>
+                            </button>
+
+                            <button *ngIf="item.estado === 0" class="usr-btn-action usr-btn-edit"
+                                (click)="toggleEstado.emit(item)">
+                                <i class="fa-solid fa-user-check"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr *ngIf="habitaciones.length === 0">
+                    <td colspan="5" class="usr-empty">No hay habitaciones registradas</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

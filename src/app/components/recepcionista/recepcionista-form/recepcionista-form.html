@@ -1,0 +1,60 @@
+<div class="usr-card usr-form-card">
+    <div class="usr-card-header">
+        <h3 class="usr-card-title">
+            <i class="fa-solid fa-user-tie"></i>
+            {{ editMode ? 'Editar recepcionista' : 'Registrar recepcionista' }}
+        </h3>
+
+        <button class="usr-btn-icon" type="button" (click)="cancel()">✖</button>
+    </div>
+
+    <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+        <div class="usr-form-grid">
+
+            <div>
+                <label class="usr-label">Cédula <span class="usr-required">*</span></label>
+                <input class="usr-input" type="text" name="cedula" [(ngModel)]="recepcionista.cedula"
+                    [readonly]="editMode" required />
+            </div>
+
+            <div>
+                <label class="usr-label">Nombre <span class="usr-required">*</span></label>
+                <input class="usr-input" type="text" name="nombre" [(ngModel)]="recepcionista.nombre" required />
+            </div>
+
+            <div>
+                <label class="usr-label">Apellidos <span class="usr-required">*</span></label>
+                <input class="usr-input" type="text" name="apellidos" [(ngModel)]="recepcionista.apellidos" required />
+            </div>
+
+            <div>
+                <label class="usr-label">Teléfono <span class="usr-required">*</span></label>
+                <input class="usr-input" type="text" name="telefono" [(ngModel)]="recepcionista.telefono" required />
+            </div>
+
+            <div>
+                <label class="usr-label">Correo <span class="usr-required">*</span></label>
+                <input class="usr-input" type="email" name="correo" [(ngModel)]="recepcionista.correo" required />
+            </div>
+
+            <div *ngIf="editMode">
+                <label class="usr-label">Estado</label>
+                <select class="usr-input" name="estado" [(ngModel)]="recepcionista.estado">
+                    <option [ngValue]="1">Activo</option>
+                    <option [ngValue]="0">Inactivo</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="usr-form-actions">
+            <button type="button" class="usr-btn-secondary" (click)="cancel()" [disabled]="loading">
+                Cancelar
+            </button>
+
+            <button type="submit" class="usr-btn-primary" [disabled]="loading">
+                {{ editMode ? 'Actualizar' : 'Guardar' }}
+            </button>
+        </div>
+    </form>
+</div>

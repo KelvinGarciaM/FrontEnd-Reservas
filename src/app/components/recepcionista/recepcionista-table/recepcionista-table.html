@@ -1,0 +1,65 @@
+<div class="usr-card">
+    <div class="usr-card-header">
+        <h3 class="usr-card-title">
+            <i class="fa-solid fa-user-tie"></i>
+            Lista de recepcionistas
+        </h3>
+
+        <div class="usr-search-box">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" placeholder="Buscar recepcionista..." [(ngModel)]="searchTerm"
+                (ngModelChange)="onSearch()" />
+        </div>
+    </div>
+
+    <div class="usr-table-wrapper">
+        <table class="usr-table">
+            <thead>
+                <tr>
+                    <th>Cédula</th>
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Correo</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let item of recepcionistas">
+                    <td>{{ item.cedula }}</td>
+                    <td>{{ item.nombre }} {{ item.apellidos }}</td>
+                    <td>{{ item.telefono }}</td>
+                    <td>{{ item.correo }}</td>
+
+                    <td>
+                        <span class="usr-status" [class.usr-status-active]="item.estado === 1"
+                            [class.usr-status-inactive]="item.estado !== 1">
+                            {{ item.estado === 1 ? 'Activo' : 'Inactivo' }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <div class="usr-actions">
+                            <button class="usr-btn-action usr-btn-edit"
+                                (click)="editRecepcionista.emit(item)">✏️</button>
+                            <button *ngIf="item.estado === 1" class="usr-btn-action usr-btn-delete"
+                                (click)="toggleEstado.emit(item.cedula)">
+                                <i class="fa-solid fa-user-slash"></i>
+                            </button>
+
+                            <button *ngIf="item.estado === 0" class="usr-btn-action usr-btn-edit"
+                                (click)="toggleEstado.emit(item.cedula)">
+                                <i class="fa-solid fa-user-check"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr *ngIf="recepcionistas.length === 0">
+                    <td colspan="6" class="usr-empty">No hay recepcionistas registrados</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
