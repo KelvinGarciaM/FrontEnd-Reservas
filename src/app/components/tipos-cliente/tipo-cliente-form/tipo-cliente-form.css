@@ -1,0 +1,142 @@
+.tc-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.07);
+  overflow: hidden;
+}
+
+.tc-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+
+.tc-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tc-card-title i {
+  color: #2563eb;
+}
+
+.tc-btn-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #64748b;
+}
+
+.tc-btn-icon:hover {
+  background: #f1f5f9;
+}
+
+.tc-form-card form {
+  padding: 20px;
+}
+
+.tc-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.tc-form-group-full {
+  grid-column: 1 / -1;
+}
+
+.tc-label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.tc-required {
+  color: #ef4444;
+}
+
+.tc-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 8px;
+  font-size: 13.5px;
+  color: #1e293b;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.tc-input:focus {
+  border-color: #2563eb;
+}
+
+.tc-textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.tc-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0,0,0,0.07);
+}
+
+.tc-btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.tc-btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.tc-btn-primary:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+
+.tc-btn-secondary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: transparent;
+  color: #64748b;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.tc-btn-secondary:hover {
+  background: #f1f5f9;
+}

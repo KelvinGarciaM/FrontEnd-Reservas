@@ -14,6 +14,8 @@ import { TarifaEdit } from './components/tarifa/tarifa-edit/tarifa-edit';
 import { TarifaDetail } from './components/tarifa/tarifa-detail/tarifa-detail';
 
 import { UsersComponent } from './components/users/users';
+import { ClientesComponent } from './components/clientes/clientes';
+import { TiposClienteComponent } from './components/tipos-cliente/tipos-cliente';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -42,7 +44,11 @@ export const routes: Routes = [
 
       // solo admin
       { path: 'usuarios', component: UsersComponent, canActivate: [adminGuard] },
-    ],
+
+      { path: 'tipos-cliente', component: TiposClienteComponent},
+      { path: 'clientes', component:ClientesComponent}
+    ]
+
   },
 
   { path: '**', redirectTo: 'login' },

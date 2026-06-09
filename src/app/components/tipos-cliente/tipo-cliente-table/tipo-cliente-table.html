@@ -1,0 +1,73 @@
+<div class="tc-card">
+  <div class="tc-card-header">
+    <h3 class="tc-card-title">
+      <i class="fa-solid fa-address-card"></i>
+      Lista de tipos de cliente
+    </h3>
+
+    <div class="tc-search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" placeholder="Buscar tipo cliente..." [(ngModel)]="searchTerm" (input)="onSearch()" />
+    </div>
+  </div>
+
+  <div class="tc-table-wrapper">
+    <table class="tc-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Descuento base</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for(tc of _tiposCliente; track tc.idTipoCliente) {
+        <tr>
+          <td>{{ tc.idTipoCliente }}</td>
+          <td>{{ tc.nombreTipoC }}</td>
+          <td>{{ tc.descripcion }}</td>
+          <td>{{ tc.descuentoBase }}%</td>
+          <td>
+            <span class="tc-status" [class.tc-status-active]="+tc.estado === 1"
+              [class.tc-status-inactive]="+tc.estado === 0">
+              {{ +tc.estado === 1 ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td>
+            <div class="tc-actions">
+              <button class="tc-btn-action tc-btn-edit" 
+                (click)="onEdit(tc)" 
+                [disabled]="tc.estado === 0"
+                title="Editar">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+
+              <button class="tc-btn-action" [class.tc-btn-delete]="+tc.estado === 1"
+                [class.tc-btn-activate]="+tc.estado === 0" (click)="toggleEstado.emit(tc)"
+                [title]="+tc.estado === 1 ? 'Desactivar' : 'Activar'">
+
+                @if(tc.estado === 1) {
+                <i class="fa-solid fa-power-off"></i>
+                } @else {
+                <i class="fa-solid fa-power-off"></i>
+                }
+
+              </button>
+            </div>
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="5" class="tc-empty">
+            No hay tipos de cliente registrados.
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
