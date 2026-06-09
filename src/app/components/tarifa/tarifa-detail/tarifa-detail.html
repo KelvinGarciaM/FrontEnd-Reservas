@@ -1,0 +1,254 @@
+<div class="container-fluid p-4 bg-light min-vh-100">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-start mb-4">
+    <div>
+      <button class="btn btn-link text-decoration-none text-primary p-0 mb-2" routerLink="/tarifas">
+        <i class="bi bi-arrow-left me-2"></i>
+        Volver a tarifas
+      </button>
+
+      <h2 class="fw-bold mb-1">Detalle de Tarifa</h2>
+
+      <nav>
+        <span class="text-primary">Tarifas</span>
+        <span class="mx-2 text-muted">›</span>
+        <span class="text-muted">Detalle</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Card principal -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4">
+      <div class="row align-items-center">
+        <div class="col-lg-8 d-flex align-items-center gap-3">
+          <div class="icon-circle bg-primary bg-opacity-10 text-primary">
+            <i class="bi bi-tag-fill"></i>
+          </div>
+
+          <div>
+            <h3 class="fw-bold mb-1">
+              {{ tarifa().nombretarifa }}
+            </h3>
+
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-muted"> Estado actual: </span>
+
+              @if (getEstadoTexto() === 'Activa') {
+                <span class="status-badge status-active"> <span></span> Activa </span>
+              }
+
+              @if (getEstadoTexto() === 'Próxima') {
+                <span class="status-badge status-next"> <span></span> Próxima </span>
+              }
+
+              @if (getEstadoTexto() === 'Inactiva') {
+                <span class="status-badge status-inactive"> <span></span> Inactiva </span>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido -->
+  <div class="row g-4 mb-4">
+    <!-- Información general -->
+    <div class="col-lg-5">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-4">
+            <i class="bi bi-info-square text-primary me-2"></i>
+            Información general
+          </h5>
+
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between">
+              <strong>ID</strong>
+              <span>#{{ tarifa().idtarifa }}</span>
+            </li>
+
+            <li class="list-group-item d-flex justify-content-between">
+              <strong>Tipo habitación</strong>
+              <span>{{ tarifa().tipohabitacion }}</span>
+            </li>
+
+            <li class="list-group-item d-flex justify-content-between">
+              <strong>Precio base</strong>
+              <span>₡ {{ tarifa().preciobase }}</span>
+            </li>
+
+            <li class="list-group-item descripcion-item">
+              <strong class="d-block mb-2">Descripción</strong>
+
+              <p class="text-muted mb-0 descripcion-texto">
+                {{ tarifa().descripcion || 'Sin descripción registrada.' }}
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vigencia -->
+    <div class="col-lg-3">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-4">
+            <i class="bi bi-calendar-week text-purple me-2"></i>
+            Vigencia
+          </h5>
+
+          <div class="d-flex justify-content-between mb-4">
+            <strong>Inicio:</strong>
+            <span>{{ tarifa().fechainicio }}</span>
+          </div>
+
+          <div class="d-flex justify-content-between mb-4">
+            <strong>Fin:</strong>
+            <span>{{ tarifa().fechafin }}</span>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <strong>Duración:</strong>
+            <span>{{ duracionDias }} días</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Información contextual -->
+    <div class="col-lg-4">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-4">
+            <i class="bi bi-exclamation-circle text-warning me-2"></i>
+            Información contextual
+          </h5>
+
+          @if (getEstadoTexto() === 'Activa') {
+            <div class="context-card context-active mb-3">
+              <i class="bi bi-calendar-check"></i>
+
+              <div>
+                <h6 class="fw-bold">Tarifa activa</h6>
+
+                <p class="mb-0">
+                  Esta tarifa está activa desde el
+                  {{ tarifa().fechainicio }}
+                  y estará vigente hasta el
+                  {{ tarifa().fechafin }}.
+                </p>
+              </div>
+            </div>
+          }
+
+          @if (getEstadoTexto() === 'Próxima') {
+            <div class="context-card context-next mb-3">
+              <i class="bi bi-calendar-event"></i>
+
+              <div>
+                <h6 class="fw-bold">Próxima</h6>
+
+                <p class="mb-0">
+                  Esta tarifa se activará automáticamente el
+                  {{ tarifa().fechainicio }}.
+                </p>
+              </div>
+            </div>
+          }
+
+          @if (getEstadoTexto() === 'Inactiva') {
+            <div class="context-card context-inactive mb-3">
+              <i class="bi bi-calendar-x"></i>
+
+              <div>
+                <h6 class="fw-bold">Inactiva</h6>
+
+                <p class="mb-0">
+                  {{ getMotivoInactiva() }}
+                </p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estadísticas -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4">
+      <h5 class="fw-bold mb-4">
+        <i class="bi bi-bar-chart text-success me-2"></i>
+        Estadísticas
+      </h5>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="stat-item">
+            <div class="stat-icon bg-success bg-opacity-10 text-success">
+              <i class="bi bi-people-fill"></i>
+            </div>
+
+            <div>
+              <small class="text-muted"> Reservas que usan esta tarifa </small>
+
+              <h2 class="fw-bold text-success">{{ estadisticas().totalReservas }}</h2>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="stat-item">
+            <div class="stat-icon bg-primary bg-opacity-10 text-primary">
+              <i class="bi bi-calendar2-week"></i>
+            </div>
+
+            <div>
+              <small class="text-muted"> Última vez utilizada </small>
+
+              <h2 class="fw-bold text-primary">
+                {{ estadisticas().ultimaVezUtilizada || 'Sin uso' }}
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botones -->
+  <div class="card shadow-sm border-0">
+    <div class="card-body d-flex justify-content-between align-items-center">
+      <button class="btn btn-outline-secondary px-4" routerLink="/tarifa-list">
+        <i class="bi bi-arrow-left me-2"></i>
+        Volver
+      </button>
+
+      <div class="d-flex gap-3">
+        @if (getEstadoTexto() === 'Activa') {
+          <button class="btn btn-danger px-4" (click)="desactivarTarifa()">
+            <i class="bi bi-power me-2"></i>
+            Desactivar
+          </button>
+        } @else {
+          <button
+            class="btn btn-success px-4"
+            [disabled]="!puedeActivarse()"
+            (click)="activarTarifa()"
+          >
+            <i class="bi bi-arrow-clockwise me-2"></i>
+            Activar
+          </button>
+        }
+
+        <button class="btn btn-primary px-4" [routerLink]="['/tarifas/editar', tarifa().idtarifa]">
+          <i class="bi bi-pencil me-2"></i>
+          Editar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

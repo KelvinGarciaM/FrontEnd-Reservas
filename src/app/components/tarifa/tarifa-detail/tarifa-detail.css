@@ -1,0 +1,116 @@
+.card {
+  border-radius: 16px;
+}
+
+.icon-circle {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 38px;
+}
+
+.status-badge {
+  padding: 7px 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.status-badge span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.status-active {
+  background: #e7f7ef;
+  color: #16a34a;
+}
+
+.status-active span {
+  background: #16a34a;
+}
+
+.status-next {
+  background: #fff3cd;
+  color: #f0ad00;
+}
+
+.status-next span {
+  background: #f0ad00;
+}
+
+.status-inactive {
+  background: #fde8eb;
+  color: #dc3545;
+}
+
+.status-inactive span {
+  background: #dc3545;
+}
+
+.context-box,
+.context-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 14px;
+}
+
+.context-box i,
+.context-card i {
+  font-size: 30px;
+}
+
+.context-active {
+  background: #e7f7ef;
+  color: #0f7a43;
+}
+
+.context-next {
+  background: #fff3cd;
+  color: #9a6a00;
+}
+
+.context-inactive {
+  background: #fde8eb;
+  color: #b42332;
+}
+
+.text-purple {
+  color: #7c3aed;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.stat-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+}
+
+.list-group-item {
+  padding: 14px 0;
+}
+
+.descripcion-item {
+  display: block;
+}
+
+.descripcion-texto {
+  line-height: 1.7;
+  text-align: justify;
+  word-break: normal;
+}

@@ -1,0 +1,215 @@
+<div class="container-fluid p-4 bg-light min-vh-100">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold mb-1">Nueva Tarifa</h2>
+
+      <nav>
+        <span class="text-primary">Tarifas</span>
+        <span class="mx-2 text-muted">›</span>
+        <span class="text-muted">Nueva Tarifa</span>
+      </nav>
+    </div>
+  </div>
+
+  <form #tarifaForm="ngForm" (ngSubmit)="onSubmit(tarifaForm)">
+    <!-- Información de la tarifa -->
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body p-4">
+        <h5 class="fw-bold mb-4">
+          <i class="bi bi-card-list text-primary me-2"></i>
+          Información de la tarifa
+        </h5>
+
+        <div class="row g-4">
+          <!-- Nombre -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              Nombre de la tarifa
+              <span class="text-danger">*</span>
+            </label>
+
+            <input
+              type="text"
+              name="nombreTarifa"
+              class="form-control"
+              placeholder="Ej. Tarifa Corporativa"
+              required
+              #nombreTarifa="ngModel"
+              [(ngModel)]="tarifa.nombreTarifa"
+            />
+          </div>
+
+          <!-- Tipo habitación -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              Tipo de habitación
+              <span class="text-danger">*</span>
+            </label>
+
+            <select
+              class="form-select"
+              name="idTipoHabitacion"
+              #idTipoHabitacion="ngModel"
+              [(ngModel)]="tarifa.idTipoHabitacion"
+              required
+            >
+              <option [ngValue]="null" selected disabled>Seleccionar tipo de habitación</option>
+              @for (th of tiposHabitacion(); track th.idtipohabitacion) {
+                <option [ngValue]="th.idtipohabitacion">
+                  {{ th.nombretipohab }}
+                </option>
+              }
+            </select>
+          </div>
+
+          <!-- Descripción -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold"> Descripción </label>
+
+            <textarea
+              rows="4"
+              class="form-control"
+              name="descripcion"
+              #descripcion="ngModel"
+              [(ngModel)]="tarifa.descripcion"
+              placeholder="Describe las condiciones o características de esta tarifa"
+            ></textarea>
+          </div>
+
+          <!-- Precio -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              Precio base (por noche)
+              <span class="text-danger">*</span>
+            </label>
+
+            <div class="input-group">
+              <span class="input-group-text">₡</span>
+
+              <input
+                type="number"
+                class="form-control"
+                name="precio"
+                #precio="ngModel"
+                [(ngModel)]="tarifa.precioBase"
+                placeholder="0.00"
+                required
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vigencia -->
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body p-4">
+        <h5 class="fw-bold mb-4">
+          <i class="bi bi-calendar-week text-primary me-2"></i>
+          Vigencia de la tarifa
+        </h5>
+
+        <div class="row g-4">
+          <!-- Fecha inicio -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              Fecha de inicio
+              <span class="text-danger">*</span>
+            </label>
+
+            <input
+              type="date"
+              class="form-control"
+              name="fechaInicio"
+              #fechaInicio="ngModel"
+              [(ngModel)]="tarifa.fechaInicio"
+              [min]="fechaActual"
+              (ngModelChange)="calcularEstado()"
+              required
+            />
+          </div>
+
+          <!-- Fecha fin -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              Fecha de fin
+              <span class="text-danger">*</span>
+            </label>
+
+            <input
+              type="date"
+              class="form-control"
+              name="fechaFin"
+              #fechaFin="ngModel"
+              [(ngModel)]="tarifa.fechaFin"
+              [min]="tarifa.fechaInicio || fechaActual"
+              (ngModelChange)="calcularEstado()"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Información -->
+        <div class="alert alert-primary mt-4 mb-0">
+          <div class="d-flex align-items-start">
+            <i class="bi bi-info-circle me-2"></i>
+
+            <div>
+              <strong>Importante:</strong>
+
+              La tarifa estará activa únicamente en el rango de fechas seleccionado. Si una fecha no
+              tiene tarifa activa, el sistema no permitirá usarla en las reservas.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estado -->
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body p-4">
+        <h5 class="fw-bold mb-4">
+          <i class="bi bi-shield-check text-primary me-2"></i>
+          Estado de la tarifa
+        </h5>
+
+        <div class="row g-4 align-items-center">
+          <!-- Estado -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold"> Estado </label>
+
+            <input type="text" class="form-control" [value]="estadoTexto" readonly />
+          </div>
+
+          <!-- Mensaje -->
+          <div class="col-md-6">
+            <div class="alert alert-success mb-0">
+              <div class="d-flex align-items-start">
+                <i class="bi bi-check-circle me-2"></i>
+
+                <div>
+                  Las tarifas activas estarán disponibles para ser utilizadas en las reservas según
+                  su rango de fechas.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="d-flex justify-content-between">
+      <button type="button" class="btn btn-outline-secondary px-4" routerLink="/tarifa-list">
+        <i class="bi bi-x-lg me-2"></i>
+        Cancelar
+      </button>
+
+      <button type="submit" class="btn btn-primary px-4"  [disabled]="errorFechas || tarifaForm.invalid">
+        <i class="bi bi-floppy me-2"></i>
+        Guardar Tarifa
+      </button>
+    </div>
+  </form>
+</div>

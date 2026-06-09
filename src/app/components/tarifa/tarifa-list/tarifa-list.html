@@ -1,0 +1,266 @@
+<div class="container-fluid p-4 bg-light min-vh-100">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">Tarifas</h2>
+
+    <button class="btn btn-primary px-4 btn-add" routerLink="/tarifa-add">
+      <i class="bi bi-plus-lg me-2"></i>
+      Nueva Tarifa
+    </button>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card metric-card">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="metric-icon icon-blue">
+            <i class="bi bi-building"></i>
+          </div>
+          <div>
+            <span class="text-muted">Total tarifas</span>
+            <h3 class="fw-bold mb-0">{{ tarifas().length }}</h3>
+            <small class="text-muted">Todas las tarifas</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card metric-card">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="metric-icon icon-green">
+            <i class="bi bi-check-circle"></i>
+          </div>
+          <div>
+            <span class="text-muted">Tarifas activas</span>
+            <h3 class="fw-bold mb-0">{{ totalActivas() }}</h3>
+            <small class="text-muted">Disponibles</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card metric-card">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="metric-icon icon-yellow">
+            <i class="bi bi-calendar-event"></i>
+          </div>
+          <div>
+            <span class="text-muted">Próximas a iniciar</span>
+            <h3 class="fw-bold mb-0">{{ totalProximas() }}</h3>
+            <small class="text-muted">Por iniciar</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card metric-card">
+        <div class="card-body d-flex align-items-center gap-3">
+          <div class="metric-icon icon-red">
+            <i class="bi bi-x-circle"></i>
+          </div>
+          <div>
+            <span class="text-muted">Tarifas inactivas</span>
+            <h3 class="fw-bold mb-0">{{ totalInactivas() }}</h3>
+            <small class="text-muted">No disponibles</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card filters-card mb-4">
+    <div class="card-body">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <div class="input-group">
+            <input
+              type="text"
+              id="filtroBusqueda"
+              class="form-control"
+              placeholder="Buscar por nombre de tarifa o tipo de habitación..."
+            />
+            <span class="input-group-text">
+              <i class="bi bi-search"></i>
+            </span>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">Tipo de habitación</label>
+          <select class="form-select" id="filtroTipoHabitacion">
+            <option>Todos</option>
+            @for (th of tiposHabitacion(); track th.idtipohabitacion) {
+              <option>{{ th.nombretipohab }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">Fecha inicio</label>
+          <input type="date" class="form-control" id="filtroFechaInicio" />
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">Fecha fin</label>
+          <input type="date" class="form-control" id="filtroFechaFin" />
+        </div>
+
+        <div class="col-md-2">
+          <button class="btn btn-outline-secondary w-100" id="btnLimpiarFiltros">
+            <i class="bi bi-arrow-clockwise me-2"></i>
+            Limpiar filtros
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-lg-9">
+      <div class="card table-card">
+        <div class="card-body">
+          <table id="tablaTarifas" class="table table-hover align-middle w-100">
+            <thead>
+              <tr>
+                <th>ID Tarifa</th>
+                <th>Nombre tarifa</th>
+                <th>Tipo habitación</th>
+                <th>Precio base</th>
+                <th class="text-nowrap">Fecha inicio</th>
+                <th class="text-nowrap">Fecha fin</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (tarifa of tarifas(); track tarifa.idtarifa) {
+                <tr>
+                  <td>#{{ tarifa.idtarifa }}</td>
+                  <td class="fw-semibold">{{ tarifa.nombretarifa }}</td>
+                  <td>{{ tarifa.tipohabitacion }}</td>
+                  <td>₡ {{ tarifa.preciobase }}</td>
+                  <td class="text-nowrap">{{ tarifa.fechainicio }}</td>
+                  <td class="text-nowrap">{{ tarifa.fechafin }}</td>
+
+                  <td>
+                    @if (
+                      tarifa.estado === 'Activo' &&
+                      fechaActual >= tarifa.fechainicio &&
+                      fechaActual <= tarifa.fechafin
+                    ) {
+                      <span class="status-badge status-active"> <span></span> Activa </span>
+                    } @else if (fechaActual < tarifa.fechainicio) {
+                      <span class="status-badge status-next"> <span></span> Próxima </span>
+                    } @else {
+                      <span class="status-badge status-inactive"> <span></span> Inactiva </span>
+                    }
+                  </td>
+
+                  <td>
+                    <div class="d-flex flex-wrap gap-2">
+                      <button class="btn action-btn btn-view" [routerLink]="['/tarifas/detalle', tarifa.idtarifa]">
+                        <i class="bi bi-eye"></i>
+                      </button>
+
+                      <button
+                        class="btn action-btn btn-edit"
+                        [routerLink]="['/tarifas/editar', tarifa.idtarifa]"
+                      >
+                        <i class="bi bi-pencil"></i>
+                      </button>
+
+                      @if (tarifa.estado === 'Activo') {
+                        <button
+                          class="btn action-btn btn-delete"
+                          title="Desactivar tarifa"
+                          (click)="desactivarTarifa(tarifa)"
+                        >
+                         <i class="bi bi-power"></i>
+                        </button>
+                      } @else {
+                        <button
+                          class="btn action-btn btn-activate"
+                          title="Activar tarifa"
+                          [disabled]="!puedeActivarse(tarifa)"
+                          (click)="activarTarifa(tarifa)"
+                        >
+                          <i class="bi bi-arrow-clockwise"></i>
+                        </button>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3">
+      <div class="card side-card mb-3">
+        <div class="card-header fw-bold">Tipos de habitación</div>
+
+        <div class="list-group list-group-flush">
+          @for (th of tiposHabitacion().slice(0, 10); track th.idtipohabitacion) {
+            <div class="list-group-item d-flex align-items-center gap-3">
+              <i class="bi bi-bed text-primary"></i>
+              <div>
+                <div class="fw-semibold">{{ th.nombretipohab }}</div>
+                <small class="text-muted">
+                  {{ contarTarifasPorTipo(th.nombretipohab) }} tarifas
+                </small>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="card side-card mb-3">
+        <div class="card-body">
+          <h6 class="text-primary fw-bold">
+            <i class="bi bi-info-circle me-2"></i>
+            Información
+          </h6>
+          <p class="text-muted small mb-0">
+            Las tarifas se aplican por noche según el tipo de habitación y las fechas de vigencia
+            establecidas.
+          </p>
+        </div>
+      </div>
+
+      <div class="card side-card">
+        <div class="card-body">
+          <h6 class="fw-bold mb-3">Estado de tarifas</h6>
+
+          <div class="d-flex gap-2 mb-3">
+            <span class="dot bg-success"></span>
+            <div>
+              <div class="fw-semibold">Activa</div>
+              <small class="text-muted">Tarifa disponible</small>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 mb-3">
+            <span class="dot bg-warning"></span>
+            <div>
+              <div class="fw-semibold">Próxima</div>
+              <small class="text-muted">Tarifa por iniciar</small>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2">
+            <span class="dot bg-danger"></span>
+            <div>
+              <div class="fw-semibold">Inactiva</div>
+              <small class="text-muted">Tarifa finalizada o deshabilitada</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
