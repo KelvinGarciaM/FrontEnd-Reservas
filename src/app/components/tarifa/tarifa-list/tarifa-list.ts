@@ -7,6 +7,7 @@ import { computed } from '@angular/core';
 import { UtilsService } from '../../../services/utils.service';
 import { TipoHabitacionService } from '../../../services/tipoHabitacion.service';
 import { RouterLink } from '@angular/router';
+import Swal from 'sweetalert2';
 declare var $: any;
 @Component({
   selector: 'app-tarifa-list',
@@ -152,29 +153,80 @@ export class TarifaList implements OnInit {
   }
 
   activarTarifa(tarifa: any) {
-    this.guardarPaginaActual();
-    this.tarifaService.activarTarifa(tarifa.idtarifa).subscribe({
-      next: (response) => {
-        console.log(response);
-        this.loadTarifas();
-      },
-      error: (err) => {
-        console.log(err.error);
-        alert(err.error.error);
-      },
+    Swal.fire({
+      title: '¿Activar tarifa?',
+      text: `La tarifa "${tarifa.nombretarifa}" volverá a estar disponible.`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#198754',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Sí, activar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.guardarPaginaActual();
+
+        this.tarifaService.activarTarifa(tarifa.idtarifa).subscribe({
+          next: (response) => {
+            this.loadTarifas();
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Tarifa activada',
+              text: 'La tarifa se activó correctamente.',
+              confirmButtonColor: '#198754',
+            });
+          },
+
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: err.error.error,
+              confirmButtonColor: '#dc3545',
+            });
+          },
+        });
+      }
     });
   }
 
   desactivarTarifa(tarifa: any) {
-    this.guardarPaginaActual();
-    this.tarifaService.desactivarTarifa(tarifa.idtarifa).subscribe({
-      next: (response) => {
-        console.log(response);
-        this.loadTarifas();
-      },
-      error: (err) => {
-        console.log(err.error);
-      },
+    Swal.fire({
+      title: '¿Desactivar tarifa?',
+      text: `La tarifa "${tarifa.nombretarifa}" dejará de estar disponible.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc3545',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Sí, desactivar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.guardarPaginaActual();
+
+        this.tarifaService.desactivarTarifa(tarifa.idtarifa).subscribe({
+          next: (response) => {
+            this.loadTarifas();
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Tarifa desactivada',
+              text: 'La tarifa se desactivó correctamente.',
+              confirmButtonColor: '#0d6efd',
+            });
+          },
+
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'No se pudo desactivar la tarifa.',
+              confirmButtonColor: '#dc3545',
+            });
+          },
+        });
+      }
     });
   }
 }

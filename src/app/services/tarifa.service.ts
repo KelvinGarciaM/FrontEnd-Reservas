@@ -43,4 +43,11 @@ export class TarifaService {
       { headers: this.headers },
     );
   }
+
+  getEstadisticasTarifa(idTarifa:number){
+  return this._http.get(
+    this.url + 'tarifas/' + idTarifa + '/estadisticas',
+    { headers: this.headers }
+  );
+}
 }

@@ -161,7 +161,7 @@
 
                   <td>
                     <div class="d-flex flex-wrap gap-2">
-                      <button class="btn action-btn btn-view">
+                      <button class="btn action-btn btn-view" [routerLink]="['/tarifas/detalle', tarifa.idtarifa]">
                         <i class="bi bi-eye"></i>
                       </button>
 
@@ -178,7 +178,7 @@
                           title="Desactivar tarifa"
                           (click)="desactivarTarifa(tarifa)"
                         >
-                          <i class="bi bi-trash"></i>
+                         <i class="bi bi-power"></i>
                         </button>
                       } @else {
                         <button

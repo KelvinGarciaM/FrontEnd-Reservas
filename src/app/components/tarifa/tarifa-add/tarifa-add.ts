@@ -6,6 +6,7 @@ import { signal } from '@angular/core';
 import { TipoHabitacionService } from '../../../services/tipoHabitacion.service';
 import { UtilsService } from '../../../services/utils.service';
 import { RouterLink } from '@angular/router';
+import Swal from 'sweetalert2';
 declare var $: any;
 @Component({
   selector: 'app-tarifa-add',
@@ -87,9 +88,24 @@ export class TarifaAdd {
     this.tarifaService.createTarifa(this.tarifa).subscribe({
       next(response) {
         console.log(response);
+         Swal.fire({
+        icon:'success',
+        title:'Tarifa guardada',
+        text:'La tarifa se registró correctamente',
+        confirmButtonColor:'#0d6efd',
+        confirmButtonText:'Aceptar'
+      });
+      form.reset();
       },
       error: (err: Error) => {
         console.log('Error--------->', err);
+         Swal.fire({
+        icon:'error',
+        title:'Error',
+        text:'No se pudo guardar la tarifa',
+        confirmButtonColor:'#dc3545'
+      });
+
       },
     });
   }

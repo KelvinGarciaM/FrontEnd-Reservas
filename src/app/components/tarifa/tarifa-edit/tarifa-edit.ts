@@ -5,10 +5,11 @@ import { Tarifa } from '../../../models/tarifa';
 import { TarifaService } from '../../../services/tarifa.service';
 import { TipoHabitacionService } from '../../../services/tipoHabitacion.service';
 import { UtilsService } from '../../../services/utils.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-tarifa-edit',
-  imports: [FormsModule,RouterLink],
+  imports: [FormsModule, RouterLink],
   templateUrl: './tarifa-edit.html',
   styleUrl: './tarifa-edit.css',
 })
@@ -71,17 +72,15 @@ export class TarifaEdit implements OnInit {
           );
 
           this.calcularEstado();
-         this.tarifaCargada.set(true);
+          this.tarifaCargada.set(true);
           console.log('Tarifa final:', this.tarifa);
         }
-       
       },
       error: (err) => {
         console.log(err);
       },
     });
   }
-
 
   calcularEstado() {
     if (!this.tarifa.fechaInicio || !this.tarifa.fechaFin) {
@@ -129,10 +128,26 @@ export class TarifaEdit implements OnInit {
     this.tarifaService.updateTarifa(this.idTarifa, this.tarifa).subscribe({
       next: (response) => {
         console.log(response);
-        this.router.navigate(['/tarifas']);
+        Swal.fire({
+          icon: 'success',
+          title: 'Tarifa actulizada',
+          text: 'La tarifa se actualizó correctamente',
+          confirmButtonColor: '#0d6efd',
+          confirmButtonText: 'Aceptar',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.router.navigate(['/tarifa-list']);
+          }
+        });
       },
       error: (err) => {
         console.log('Error al actualizar tarifa:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo actualizar la tarifa',
+          confirmButtonColor: '#dc3545',
+        });
       },
     });
   }
