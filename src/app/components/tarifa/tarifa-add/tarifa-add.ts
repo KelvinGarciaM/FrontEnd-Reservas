@@ -3,7 +3,7 @@ import { Tarifa } from '../../../models/tarifa';
 import { TarifaService } from '../../../services/tarifa.service';
 import { FormsModule } from '@angular/forms';
 import { signal } from '@angular/core';
-import { TipoHabitacionService } from '../../../services/tipoHabitacion.service';
+import { TipoHabitacionService } from '../../../services/tipo-habitacion.service';
 import { UtilsService } from '../../../services/utils.service';
 import { RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';

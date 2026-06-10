@@ -1,42 +1,42 @@
-<div class="usr-card usr-form-card">
-  <div class="usr-card-header">
-    <h3 class="usr-card-title">
+<div class="app-card app-form-card">
+  <div class="app-card-header">
+    <h3 class="app-card-title">
       <i class="fa-solid fa-user-plus"></i>
       {{ editMode ? 'Editar Usuario' : 'Nuevo Usuario' }}
     </h3>
-    <button class="usr-btn-icon" (click)="close()">
+    <button class="app-btn-icon" (click)="close()">
       <i class="fa-solid fa-xmark"></i>
     </button>
   </div>
 
   <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
-    <div class="usr-form-grid">
+    <div class="app-form-grid">
 
-      <div class="usr-form-group">
-        <label class="usr-label">Nombre <span class="usr-required">*</span></label>
-        <input type="text" class="usr-input" placeholder="Nombre completo" name="name" [(ngModel)]="user.name"
+      <div class="app-form-group">
+        <label class="app-label">Nombre <span class="app-required">*</span></label>
+        <input type="text" class="app-input" placeholder="Nombre completo" name="name" [(ngModel)]="user.name"
           required />
       </div>
 
-      <div class="usr-form-group">
-        <label class="usr-label">Correo <span class="usr-required">*</span></label>
-        <input type="email" class="usr-input" placeholder="correo@ejemplo.com" name="email" [(ngModel)]="user.email"
+      <div class="app-form-group">
+        <label class="app-label">Correo <span class="app-required">*</span></label>
+        <input type="email" class="app-input" placeholder="correo@ejemplo.com" name="email" [(ngModel)]="user.email"
           required />
       </div>
 
-      <div class="usr-form-group">
-        <label class="usr-label">
+      <div class="app-form-group">
+        <label class="app-label">
           Contraseña
-          @if(!editMode) { <span class="usr-required">*</span> }
-          @if(editMode) { <span class="usr-optional">(vacío = sin cambios)</span> }
+          @if(!editMode) { <span class="app-required">*</span> }
+          @if(editMode) { <span class="app-optional">(vacío = sin cambios)</span> }
         </label>
-        <input type="password" class="usr-input" placeholder="••••••••" name="password" [(ngModel)]="user.password"
+        <input type="password" class="app-input" placeholder="••••••••" name="password" [(ngModel)]="user.password"
           [required]="!editMode" />
       </div>
 
-      <div class="usr-form-group">
-        <label class="usr-label">Rol <span class="usr-required">*</span></label>
-        <select class="usr-input" name="role" [(ngModel)]="user.role" required (ngModelChange)="onRoleChange()">
+      <div class="app-form-group">
+        <label class="app-label">Rol <span class="app-required">*</span></label>
+        <select class="app-input" name="role" [(ngModel)]="user.role" required (ngModelChange)="onRoleChange()">
           <option value="">Seleccionar rol</option>
           <option value="Administrador">Administrador</option>
           <option value="Recepcionista">Recepcionista</option>
@@ -45,9 +45,9 @@
 
       <!-- DROPDOWN CÉDULA — solo si es Recepcionista -->
       @if(user.role === 'Recepcionista') {
-      <div class="usr-form-group">
-        <label class="usr-label">Recepcionista <span class="usr-required">*</span></label>
-        <select class="usr-input" name="cedula" [(ngModel)]="user.cedula" [required]="user.role === 'Recepcionista'">
+      <div class="app-form-group">
+        <label class="app-label">Recepcionista <span class="app-required">*</span></label>
+        <select class="app-input" name="cedula" [(ngModel)]="user.cedula" [required]="user.role === 'Recepcionista'">
           <option value="" disabled selected>Seleccionar recepcionista</option>
           @for(r of recepcionistas; track r.cedula) {
           <option [value]="r.cedula">{{ r.nombre }} {{ r.apellidos }} — {{ r.cedula }}</option>
@@ -56,15 +56,15 @@
       </div>
       }
 
-      <div class="usr-form-group usr-form-group-full">
-        <label class="usr-label">Foto de perfil</label>
-        <div class="usr-upload-area" (click)="fileInput.click()">
+      <div class="app-form-group app-form-group-full">
+        <label class="app-label">Foto de perfil</label>
+        <div class="app-upload-area" (click)="fileInput.click()">
           @if(imagePreview) {
-          <img [src]="imagePreview" class="usr-upload-preview" />
+          <img [src]="imagePreview" class="app-upload-preview" />
           } @else {
-          <i class="fa-solid fa-cloud-arrow-up usr-upload-icon"></i>
-          <span class="usr-upload-text">Haz clic para subir una imagen</span>
-          <span class="usr-upload-hint">PNG, JPG hasta 5MB</span>
+          <i class="fa-solid fa-cloud-arrow-up app-upload-icon"></i>
+          <span class="app-upload-text">Haz clic para subir una imagen</span>
+          <span class="app-upload-hint">PNG, JPG hasta 5MB</span>
           }
         </div>
         <input #fileInput type="file" accept="image/*" style="display:none" (change)="onFileSelected($event)" />
@@ -72,11 +72,11 @@
 
     </div>
 
-    <div class="usr-form-actions">
-      <button type="button" class="usr-btn-secondary" (click)="resetForm()">
+    <div class="app-form-actions">
+      <button type="button" class="app-btn-secondary" (click)="resetForm()">
         <i class="fa-solid fa-rotate-left"></i> Limpiar
       </button>
-      <button type="submit" class="usr-btn-primary" [disabled]="userForm.invalid || loading">
+      <button type="submit" class="app-btn-primary" [disabled]="userForm.invalid || loading">
         @if(loading) {
         <i class="fa-solid fa-spinner fa-spin"></i> Guardando...
         } @else {

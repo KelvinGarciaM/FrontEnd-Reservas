@@ -12,7 +12,7 @@ export class HabitacionService {
   private readonly url: string;
 
   constructor(private _http: HttpClient) {
-    this.url = enviroment.apiUrl + 'habitacion';
+    this.url = enviroment.apiUrl + 'habitaciones';
   }
 
   getHabitaciones(): Observable<any> {

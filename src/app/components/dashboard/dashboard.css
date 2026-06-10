@@ -1,0 +1,219 @@
+.dashboard-wrapper {
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  font-family: sans-serif;
+}
+
+/* Header */
+.dash-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.dash-title {
+  font-size: 22px;
+  font-weight: 500;
+  margin: 0;
+  color: #2C2C2A;
+}
+.dash-sub {
+  font-size: 13px;
+  color: #888780;
+  margin: 2px 0 0;
+}
+.dash-date {
+  font-size: 13px;
+  color: #888780;
+  text-transform: capitalize;
+}
+
+/* KPI Grid */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+.kpi-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border: 0.5px solid rgba(0,0,0,0.08);
+  background: #fff;
+}
+.kpi-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.kpi-blue  .kpi-icon { background: #E6F1FB; color: #185FA5; }
+.kpi-green .kpi-icon { background: #E1F5EE; color: #0F6E56; }
+.kpi-amber .kpi-icon { background: #FAEEDA; color: #854F0B; }
+.kpi-purple .kpi-icon { background: #EEEDFE; color: #534AB7; }
+.kpi-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.kpi-label {
+  font-size: 12px;
+  color: #888780;
+}
+.kpi-value {
+  font-size: 22px;
+  font-weight: 500;
+  color: #2C2C2A;
+  line-height: 1.2;
+}
+
+/* Charts row */
+.charts-row {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 12px;
+}
+.chart-card {
+  background: #fff;
+  border: 0.5px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.chart-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2C2C2A;
+  margin: 0;
+}
+.donut-wrap {
+  position: relative;
+  width: 100%;
+  height: 160px;
+}
+.chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  color: #5F5E5A;
+}
+.leg-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.leg-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Bottom row */
+.bottom-row {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 12px;
+}
+.table-card, .rooms-card {
+  background: #fff;
+  border: 0.5px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dash-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  table-layout: fixed;
+}
+.dash-table th {
+  text-align: left;
+  padding: 6px 8px;
+  font-weight: 500;
+  color: #888780;
+  border-bottom: 0.5px solid rgba(0,0,0,0.08);
+  font-size: 12px;
+}
+.dash-table td {
+  padding: 8px 8px;
+  color: #2C2C2A;
+  border-bottom: 0.5px solid rgba(0,0,0,0.05);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dash-table tr:last-child td { border-bottom: none; }
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.badge-green { background: #E1F5EE; color: #0F6E56; }
+.badge-amber { background: #FAEEDA; color: #854F0B; }
+.badge-red   { background: #FCEBEB; color: #A32D2D; }
+
+/* Rooms */
+.room-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.room-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #F1EFE8;
+}
+.room-num {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2C2C2A;
+  min-width: 32px;
+}
+.room-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+}
+.room-tipo {
+  font-size: 12px;
+  color: #888780;
+}
+.room-estado {
+  font-size: 12px;
+  font-weight: 500;
+}
+.estado-libre   { color: #0F6E56; }
+.estado-ocupada { color: #A32D2D; }
+.estado-mant    { color: #854F0B; }
+.room-item i { font-size: 18px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .charts-row  { grid-template-columns: 1fr; }
+  .bottom-row  { grid-template-columns: 1fr; }
+  .dashboard-wrapper { padding: 1rem; }
+}

@@ -5,9 +5,10 @@ import { TarifaAdd } from '../tarifa-add/tarifa-add';
 import { TarifaService } from '../../../services/tarifa.service';
 import { computed } from '@angular/core';
 import { UtilsService } from '../../../services/utils.service';
-import { TipoHabitacionService } from '../../../services/tipoHabitacion.service';
+
 import { RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
+import { TipoHabitacionService } from '../../../services/tipo-habitacion.service';
 declare var $: any;
 @Component({
   selector: 'app-tarifa-list',
@@ -87,7 +88,7 @@ export class TarifaList implements OnInit {
           }
 
           const tabla = $('#tablaTarifas').DataTable({
-            pageLength: 10,
+            pageLength: 5,
             lengthChange: false,
             ordering: true,
             searching: true,

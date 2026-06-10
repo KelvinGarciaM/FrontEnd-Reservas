@@ -12,7 +12,7 @@ export class TipoHabitacionService {
   private readonly url: string;
 
   constructor(private _http: HttpClient) {
-    this.url = enviroment.apiUrl + 'tipo-habitacion';
+    this.url = enviroment.apiUrl + 'tipos-habitacion';
   }
 
   getTiposHabitacion(): Observable<any> {
@@ -47,4 +47,6 @@ export class TipoHabitacionService {
   deleteTipoHabitacion(id: number): Observable<any> {
     return this._http.delete(`${this.url}/${id}`);
   }
+
+   
 }

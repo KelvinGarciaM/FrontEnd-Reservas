@@ -1,0 +1,117 @@
+<div class="det-section">
+
+  <!-- FORM AGREGAR HABITACIÓN -->
+  <div class="det-form">
+    <div class="det-form-row">
+
+      <div class="app-form-group">
+        <label class="app-label">Habitación <span class="app-required">*</span></label>
+        <select class="app-input" [(ngModel)]="nuevoDetalle.idHabitacion"
+                (ngModelChange)="onHabitacionChange()">
+          <option [value]="null" disabled selected>Seleccionar habitación</option>
+          @for(h of habitaciones; track h.idhabitacion) {
+            <option [value]="h.idhabitacion">{{ h.numerohabitacion }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="app-form-group">
+        <label class="app-label">Personas</label>
+        <input type="number" class="app-input"
+               [(ngModel)]="nuevoDetalle.cantidadPersonas" min="1" max="10" />
+      </div>
+
+      <div class="app-form-group" style="grid-column: span 2;">
+        <label class="app-label">Fechas entrada / salida <span class="app-required">*</span></label>
+        <input #inputEntrada type="text" class="app-input"
+               placeholder="Seleccionar rango de fechas"
+               [disabled]="!nuevoDetalle.idHabitacion" />
+        @if(fechaConflicto) {
+          <span style="color:#ef4444; font-size:12px;">
+            <i class="fa-solid fa-circle-exclamation"></i> Fechas en conflicto
+          </span>
+        }
+      </div>
+
+      <div class="app-form-group det-btn-group">
+        <label class="app-label">&nbsp;</label>
+        <button type="button" class="app-btn-primary"
+                (click)="agregarDetalle()"
+                [disabled]="loading || fechaConflicto || !nuevoDetalle.fechaEntrada || !nuevoDetalle.fechaSalida">
+          @if(loading) {
+            <i class="fa-solid fa-spinner fa-spin"></i>
+          } @else {
+            <i class="fa-solid fa-plus"></i> Agregar
+          }
+        </button>
+      </div>
+
+    </div>
+
+    <!-- PREVIEW TARIFA -->
+    @if(tarifaActiva) {
+    <div style="margin-top:12px;">
+      <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:10px 14px; font-size:13px; color:#16a34a; display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
+        <i class="fa-solid fa-tag"></i>
+        <span><strong>Tarifa:</strong> {{ tarifaActiva.nombreTarifa }}</span>
+        <span><strong>Precio base:</strong> ₡ {{ tarifaActiva.precioBase }}</span>
+      </div>
+    </div>
+    }
+
+  </div>
+
+  <!-- TABLA DETALLES -->
+  @if(detalles.length > 0) {
+  <table class="app-table">
+    <thead>
+      <tr>
+        <th>Habitación</th>
+        <th>Tipo</th>
+        <th>Tarifa</th>
+        <th>Descuento</th>
+        <th>Personas</th>
+        <th>Entrada</th>
+        <th>Salida</th>
+        <th>Precio</th>
+        <th>IVA</th>
+        <th>Total</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for(d of detalles; track d.idDetalleReserva) {
+      <tr>
+        <td>{{ d.numeroHabitacion }}</td>
+        <td>{{ d.nombreTipoHabitacion }}</td>
+        <td>{{ d.nombreTarifa }}</td>
+        <td>{{ d.descuentoBase }}%</td>
+        <td>{{ d.cantidadPersonas }}</td>
+        <td>{{ formatFecha(d.fechaEntrada) }}</td>
+        <td>{{ formatFecha(d.fechaSalida) }}</td>
+        <td>₡ {{ d.precioAplicado | number:'1.2-2' }}</td>
+        <td>₡ {{ d.iva | number:'1.2-2' }}</td>
+        <td>₡ {{ d.total | number:'1.2-2' }}</td>
+        <td>
+          <button class="app-btn-action app-btn-delete"
+                  (click)="eliminarDetalle(d.idDetalleReserva!)"
+                  title="Eliminar">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+
+  <!-- TOTALES -->
+  <div class="det-totales">
+    <span>Subtotal: <strong>₡ {{ subTotalReserva | number:'1.2-2' }}</strong></span>
+    <span>IVA: <strong>₡ {{ ivaTotal | number:'1.2-2' }}</strong></span>
+    <span class="det-total">Total: <strong>₡ {{ totalReserva | number:'1.2-2' }}</strong></span>
+  </div>
+  } @else {
+  <p class="det-empty">No hay habitaciones agregadas aún.</p>
+  }
+
+</div>

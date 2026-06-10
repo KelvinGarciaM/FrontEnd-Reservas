@@ -51,9 +51,15 @@ export class AuthService {
       { headers }
     ).pipe(
       tap((response) => {
-        this.currentUser.set(response.user);
+        const user = {
+          ...response.user,
+          cedula: (response.user.cedula as any)?.String || response.user.cedula || '',
+          image: (response.user.image as any)?.String || response.user.image || '',
+          role: (response.user.role as any)?.String || response.user.role || ''
+        };
+        this.currentUser.set(user);
         sessionStorage.setItem('token', response.access_token);
-        sessionStorage.setItem('identity', JSON.stringify(response.user));
+        sessionStorage.setItem('identity', JSON.stringify(user));
       })
     );
   }
