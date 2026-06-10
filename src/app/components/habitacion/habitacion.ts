@@ -38,12 +38,14 @@ export class HabitacionComponent implements OnInit {
   cargarHabitaciones(): void {
     this.habitacionService.getHabitaciones().subscribe({
       next: (res) => {
+        
 
         const datos = res.habitaciones ?? [];
 
         this.habitaciones = datos.map((h: any) => ({
           idHabitacion: h.idhabitacion,
           idTipoHab: h.idtipohab,
+          nombreTipoHab: h.nombretipohab,
           numeroHabitacion: h.numerohabitacion,
           estado: h.estado
         }));

@@ -18,7 +18,8 @@
                 <tr>
                     <th>ID</th>
                     <th>Número</th>
-                    <th>ID Tipo</th>
+                    <th>ID Tipo Habitación</th>
+                    <th>Tipo Habitación</th>
                     <th>Estado</th>
                     <th>Acciones</th>
                 </tr>
@@ -29,6 +30,7 @@
                     <td>#{{ item.idHabitacion }}</td>
                     <td>{{ item.numeroHabitacion }}</td>
                     <td>{{ item.idTipoHab }}</td>
+                    <td>{{ item.nombreTipoHab }}</td>
                     <td>
                         <span class="usr-status" [class.usr-status-active]="item.estado === 1"
                             [class.usr-status-inactive]="item.estado !== 1">
@@ -41,12 +43,12 @@
 
                             <button *ngIf="item.estado === 1" class="usr-btn-action usr-btn-delete"
                                 (click)="toggleEstado.emit(item)">
-                                <i class="fa-solid fa-user-slash"></i>
+                                <i class="fa-solid fa-toggle-off"></i>
                             </button>
 
                             <button *ngIf="item.estado === 0" class="usr-btn-action usr-btn-edit"
                                 (click)="toggleEstado.emit(item)">
-                                <i class="fa-solid fa-user-check"></i>
+                                <i class="fa-solid fa-toggle-on"></i>
                             </button>
                         </div>
                     </td>

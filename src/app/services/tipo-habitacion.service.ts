@@ -12,7 +12,7 @@ export class TipoHabitacionService {
   private readonly url: string;
 
   constructor(private _http: HttpClient) {
-    this.url = enviroment.apiUrl + 'tipos-habitacion';
+    this.url = enviroment.apiUrl + 'tipo-habitacion';
   }
 
   getTiposHabitacion(): Observable<any> {
