@@ -1,7 +1,7 @@
 <div class="usr-card">
     <div class="usr-card-header">
         <h3 class="usr-card-title">
-            <i class="fa-solid fa-hotel"></i>
+            <i class="fa-solid fa-clipboard-list"></i>
             Lista de tipos de habitación
         </h3>
 
@@ -48,12 +48,12 @@
 
                             <button *ngIf="item.estado === 1" class="usr-btn-action usr-btn-delete"
                                 (click)="toggleEstado.emit(item)">
-                                <i class="fa-solid fa-user-slash"></i>
+                                <i class="fa-solid fa-toggle-off"></i>
                             </button>
 
                             <button *ngIf="item.estado === 0" class="usr-btn-action usr-btn-edit"
                                 (click)="toggleEstado.emit(item)">
-                                <i class="fa-solid fa-user-check"></i>
+                                <i class="fa-solid fa-toggle-on"></i>
                             </button>
 
                         </div>
