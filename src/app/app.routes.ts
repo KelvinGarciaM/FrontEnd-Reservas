@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 
 import { Login } from './components/login/login';
-import { Home } from './components/home/home';
 import { Error } from './components/error/error';
 
 import { authGuard, adminGuard } from './core/guards/auth-guard';
@@ -19,6 +18,8 @@ import { HabitacionComponent } from './components/habitacion/habitacion';
 import { RecepcionistaComponent } from './components/recepcionista/recepcionista';
 import { ClientesComponent } from './components/clientes/clientes';
 import { TiposClienteComponent } from './components/tipos-cliente/tipos-cliente';
+import { Reservas } from './components/reservas/reservas';
+import { Dashboard } from './components/dashboard/dashboard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -38,7 +39,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
 
     children: [
-      { path: 'home', component: Home },
+      { path: 'dashboard', component: Dashboard },
       { path: 'error', component: Error },
       { path: 'tarifa-list', component: TarifaList },
       { path: 'tarifa-add', component: TarifaAdd },
@@ -46,6 +47,7 @@ export const routes: Routes = [
       {path: 'tarifas/detalle/:id', component: TarifaDetail},
 
       // solo admin
+      { path: 'reservas', component: Reservas },
       { path: 'usuarios', component: UsersComponent, canActivate: [adminGuard] },
       { path: 'tipos-habitacion', component: TipoHabitacionComponent, canActivate: [adminGuard] },
       { path: 'habitacion', component: HabitacionComponent, canActivate: [adminGuard] },

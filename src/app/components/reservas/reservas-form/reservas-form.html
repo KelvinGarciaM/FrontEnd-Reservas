@@ -1,1 +1,158 @@
-<p>reservas-form works!</p>
+<div class="app-card app-form-card">
+  <div class="app-card-header">
+    <h3 class="app-card-title">
+      <i class="fa-solid fa-calendar-plus"></i>
+      {{ editMode ? 'Editar Reserva' : 'Nueva Reserva' }}
+    </h3>
+    <button class="app-btn-icon" (click)="close()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <form #reservaForm="ngForm" (ngSubmit)="onSubmit(reservaForm)">
+
+    <!-- TOGGLE DATOS RESERVA -->
+    <div class="det-header-toggle" (click)="mostrarDatosReserva = !mostrarDatosReserva">
+      <span class="det-title">
+        <i class="fa-solid fa-calendar-plus"></i> Datos de la reserva
+      </span>
+      <i class="fa-solid fa-chevron-down"
+         [style.transform]="mostrarDatosReserva ? 'rotate(0deg)' : 'rotate(-90deg)'"
+         style="transition:transform 0.2s; color:#94a3b8; font-size:12px;"></i>
+    </div>
+
+    @if(mostrarDatosReserva) {
+    <div class="app-form-grid">
+
+      @if(esAdmin) {
+      <div class="app-form-group">
+        <label class="app-label">Recepcionista <span class="app-required">*</span></label>
+        <select class="app-input" name="idRecepcionista"
+                [(ngModel)]="reserva.idRecepcionista"
+                [disabled]="reservaGuardada"
+                required>
+          <option value="" disabled selected>Seleccionar recepcionista</option>
+          @for(r of recepcionistas; track r.cedula) {
+            <option [value]="r.cedula">{{ r.nombre }} {{ r.apellidos }}</option>
+          }
+        </select>
+      </div>
+      } @else {
+      <div class="app-form-group">
+        <label class="app-label">Recepcionista</label>
+        <input type="text" class="app-input" [value]="authService.currentUser()?.name" disabled />
+        <input type="hidden" name="idRecepcionista" [(ngModel)]="reserva.idRecepcionista" />
+      </div>
+      }
+
+      <div class="app-form-group">
+        <label class="app-label">Fecha de reserva <span class="app-required">*</span></label>
+        <input type="datetime-local" class="app-input" name="fechaReserva"
+               [(ngModel)]="reserva.fechaReserva"
+               [disabled]="reservaGuardada"
+               required [min]="minDate" />
+      </div>
+
+      <div class="app-form-group">
+        <label class="app-label">Cédula del cliente <span class="app-required">*</span></label>
+        <div style="display:flex; gap:8px;">
+          <input type="text" class="app-input" placeholder="Ej: 1234567"
+                 name="cedulaCliente" [(ngModel)]="cedulaCliente"
+                 [disabled]="reservaGuardada"
+                 (blur)="buscarCliente()" (keyup.enter)="buscarCliente()" />
+          @if(!reservaGuardada) {
+            <button type="button" class="app-btn-secondary" (click)="buscarCliente()">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          }
+        </div>
+        @if(clienteError) {
+          <span style="color:#ef4444; font-size:12px;">{{ clienteError }}</span>
+        }
+      </div>
+
+      @if(clienteEncontrado) {
+        <div class="app-form-group">
+        <label class="app-label">Tipo de Cliente</label>
+        <input type="text" class="app-input"
+               [value]="clienteEncontrado.nombreTipoC " disabled />
+      </div>
+      <div class="app-form-group">
+        <label class="app-label">Nombre</label>
+        <input type="text" class="app-input"
+               [value]="clienteEncontrado.nombre + ' ' + clienteEncontrado.apellidos" disabled />
+      </div>
+      <div class="app-form-group">
+        <label class="app-label">Teléfono</label>
+        <input type="text" class="app-input" [value]="clienteEncontrado.telefono" disabled />
+      </div>
+      <div class="app-form-group">
+        <label class="app-label">Dirección</label>
+        <input type="text" class="app-input" [value]="clienteEncontrado.direccion" disabled />
+      </div>
+      }
+
+      <div class="app-form-group">
+        <label class="app-label">IVA</label>
+        <input type="number" class="app-input" name="iva" [(ngModel)]="reserva.iva" disabled />
+      </div>
+      <div class="app-form-group">
+        <label class="app-label">Subtotal</label>
+        <input type="number" class="app-input" name="subTotal" [(ngModel)]="reserva.subTotal" disabled />
+      </div>
+      <div class="app-form-group">
+        <label class="app-label">Total</label>
+        <input type="number" class="app-input" name="total" [(ngModel)]="reserva.total" disabled />
+      </div>
+
+    </div>
+    }
+
+    <!-- BOTONES GUARDAR/LIMPIAR — solo si no se ha guardado -->
+    @if(!reservaGuardada) {
+    <div class="app-form-actions">
+      <button type="button" class="app-btn-secondary" (click)="resetForm()">
+        <i class="fa-solid fa-rotate-left"></i> Limpiar
+      </button>
+      <button type="submit" class="app-btn-primary"
+              [disabled]="reservaForm.invalid || loading || !clienteEncontrado">
+        @if(loading) {
+          <i class="fa-solid fa-spinner fa-spin"></i> Guardando...
+        } @else {
+          <i class="fa-solid fa-floppy-disk"></i>
+          {{ editMode ? 'Actualizar' : 'Crear Reserva' }}
+        }
+      </button>
+    </div>
+    }
+
+    
+
+  </form>
+  <!-- HABITACIONES — aparece después de crear o al editar -->
+    @if(reservaGuardada || (editMode && reserva.idReserva)) {
+
+      <div class="det-header-toggle" (click)="mostrarHabitaciones = !mostrarHabitaciones">
+        <span class="det-title">
+          <i class="fa-solid fa-bed"></i> Habitaciones de la reserva
+        </span>
+        <i class="fa-solid fa-chevron-down"
+           [style.transform]="mostrarHabitaciones ? 'rotate(0deg)' : 'rotate(-90deg)'"
+           style="transition:transform 0.2s; color:#94a3b8; font-size:12px;"></i>
+      </div>
+
+      @if(mostrarHabitaciones) {
+        <app-reserva-detalle
+  [idReserva]="idReservaCreada || reserva.idReserva"
+  (totalesChanged)="onTotalesChanged($event)">
+</app-reserva-detalle>
+      }
+
+      <div class="app-form-actions">
+        <button type="button" class="app-btn-primary" (click)="finalizar()">
+          <i class="fa-solid fa-check"></i> Finalizar
+        </button>
+      </div>
+
+    }
+</div>

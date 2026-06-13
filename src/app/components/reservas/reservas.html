@@ -1,1 +1,155 @@
-<p>reservas works!</p>
+<div class="app-page">
+
+ <!-- HEADER -->
+  <div class="app-page-header">
+    <div>
+      <h2 class="app-title">Reservas</h2>
+      <div class="app-breadcrumb">
+        <span>Sistema</span>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span class="app-breadcrumb-active">Reservas</span>
+      </div>
+    </div>
+    <button class="app-btn-primary" (click)="openCreate()">
+      <i class="fa-solid fa-plus"></i> Nueva Reserva
+    </button>
+  </div>
+
+  <!-- TARJETAS RESUMEN -->
+   @if(!showForm) {
+  <div class="rsv-stats">
+    <div class="rsv-stat-card">
+      <div class="rsv-stat-icon rsv-icon-blue">
+        <i class="fa-solid fa-calendar-check"></i>
+      </div>
+      <div class="rsv-stat-info">
+        <span class="rsv-stat-value">{{ totalReservas }}</span>
+        <span class="rsv-stat-label">Total reservas</span>
+        <span class="rsv-stat-sub">Este mes</span>
+      </div>
+    </div>
+
+    <div class="rsv-stat-card">
+      <div class="rsv-stat-icon rsv-icon-amber">
+        <i class="fa-solid fa-clock"></i>
+      </div>
+      <div class="rsv-stat-info">
+        <span class="rsv-stat-value">{{ pendientes }}</span>
+        <span class="rsv-stat-label">Pendientes</span>
+        <span class="rsv-stat-sub">Por confirmar</span>
+      </div>
+    </div>
+
+    <div class="rsv-stat-card">
+      <div class="rsv-stat-icon rsv-icon-green">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <div class="rsv-stat-info">
+        <span class="rsv-stat-value">{{ confirmadas }}</span>
+        <span class="rsv-stat-label">Confirmadas</span>
+        <span class="rsv-stat-sub">Activas</span>
+      </div>
+    </div>
+
+    <div class="rsv-stat-card">
+      <div class="rsv-stat-icon rsv-icon-red">
+        <i class="fa-solid fa-circle-xmark"></i>
+      </div>
+      <div class="rsv-stat-info">
+        <span class="rsv-stat-value">{{ canceladas }}</span>
+        <span class="rsv-stat-label">Canceladas</span>
+        <span class="rsv-stat-sub">Este mes</span>
+      </div>
+    </div>
+
+    <div class="rsv-stat-card">
+      <div class="rsv-stat-icon rsv-icon-purple">
+        <i class="fa-solid fa-coins"></i>
+      </div>
+      <div class="rsv-stat-info">
+        <span class="rsv-stat-value">₡ {{ ingresosMes | number:'1.0-0' }}</span>
+        <span class="rsv-stat-label">Ingresos (mes)</span>
+        <span class="rsv-stat-sub">Total del mes</span>
+      </div>
+    </div>
+  </div>
+}
+
+  @if(showForm) {
+  <app-reserva-form
+    [editingReserva]="editingReserva"
+    (formClosed)="closeForm()"
+    (reservaSaved)="onReservaSaved()">
+  </app-reserva-form>
+
+  } @else {
+
+    <!-- CONTENIDO PRINCIPAL CON PANEL LATERAL -->
+    <div class="rsv-main-layout">
+
+      <!-- TABLA -->
+      <div class="rsv-table-col">
+        <app-reserva-table
+          [reservas]="filteredReservas"
+          (editReserva)="openEdit($event)"
+          (deleteReserva)="onDelete($event)"
+          (cambiarEstado)="onCambiarEstado($event)"
+          (searchChanged)="onSearch($event)">
+        </app-reserva-table>
+      </div>
+
+      <!-- PANEL LATERAL ESTADOS -->
+      <div class="rsv-side-panel">
+        <div class="rsv-side-card">
+          <h4 class="rsv-side-title">
+            <i class="fa-solid fa-circle-nodes"></i> Estados de reserva
+          </h4>
+          <div class="rsv-legend-item">
+            <span class="rsv-dot rsv-dot-confirmada"></span>
+            <div>
+              <span class="rsv-legend-title">Confirmada</span>
+              <span class="rsv-legend-desc">Reserva activa y confirmada</span>
+            </div>
+          </div>
+          <div class="rsv-legend-item">
+            <span class="rsv-dot rsv-dot-pendiente"></span>
+            <div>
+              <span class="rsv-legend-title">Pendiente</span>
+              <span class="rsv-legend-desc">Reserva pendiente de confirmación</span>
+            </div>
+          </div>
+          <div class="rsv-legend-item">
+            <span class="rsv-dot rsv-dot-cancelada"></span>
+            <div>
+              <span class="rsv-legend-title">Cancelada</span>
+              <span class="rsv-legend-desc">Reserva cancelada</span>
+            </div>
+          </div>
+          <div class="rsv-legend-item">
+            <span class="rsv-dot rsv-dot-finalizada"></span>
+            <div>
+              <span class="rsv-legend-title">Finalizada</span>
+              <span class="rsv-legend-desc">Reserva completada</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BARRA ACCIONES -->
+    <div class="rsv-actions-bar">
+      <i class="fa-solid fa-circle-info" style="color:#64748b"></i>
+      <strong>Acciones según estado:</strong>
+      <span><i class="fa-solid fa-eye rsv-icon-blue"></i> Ver: disponible en todos los estados</span>
+      <span class="rsv-divider">|</span>
+      <span><i class="fa-solid fa-pen rsv-icon-blue"></i> Editar: solo disponible en Pendiente y Confirmada</span>
+      <span class="rsv-divider">|</span>
+      <span><i class="fa-solid fa-check rsv-icon-green"></i> Confirmar: solo disponible en Pendiente</span>
+      <span class="rsv-divider">|</span>
+      <span><i class="fa-solid fa-xmark rsv-icon-red"></i> Cancelar: no disponible en Cancelada ni Finalizada</span>
+    </div>
+
+  }
+
+</div>

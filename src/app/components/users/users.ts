@@ -1,15 +1,15 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { User } from '../../models/user';
 import { UserService } from '../../services/users.service';
 import { UserFormComponent } from './user-form/user-form';
 import { UserTableComponent } from './user-table/user-table';
-import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-users',
   standalone: true,
   imports: [UserFormComponent, UserTableComponent],
   templateUrl: './users.html',
-  styleUrl: './users.css'
+  styleUrl: './users.css',
 })
 export class UsersComponent implements OnInit {
 
@@ -76,37 +76,10 @@ export class UsersComponent implements OnInit {
     setTimeout(() => this.closeForm(), 1500);
   }
 
-  async onDelete(id: number): Promise<void> {
-  const result = await Swal.fire({
-    icon: 'warning',
-    title: '¿Estás seguro?',
-    text: 'Esta acción no se puede deshacer.',
-    showCancelButton: true,
-    confirmButtonText: 'Sí, eliminar',
-    cancelButtonText: 'Cancelar',
-    confirmButtonColor: '#dc2626',
-    cancelButtonColor: '#64748b'
-  });
-
-  if (!result.isConfirmed) return;
-
+  onDelete(id: number): void {
   this.userService.deleteUser(id).subscribe({
     next: () => {
       this.loadUsers();
-      Swal.fire({
-        icon: 'success',
-        title: '¡Eliminado!',
-        text: 'Usuario eliminado correctamente.',
-        timer: 1500,
-        showConfirmButton: false
-      });
-    },
-    error: () => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'No se pudo eliminar el usuario.'
-      });
     }
   });
 }

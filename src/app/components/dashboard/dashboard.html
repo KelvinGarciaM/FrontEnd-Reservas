@@ -1,0 +1,144 @@
+<div class="dashboard-wrapper">
+
+  <!-- Header -->
+  <div class="dash-header">
+    <div>
+      <h1 class="dash-title">Dashboard</h1>
+      <p class="dash-sub">Resumen general del sistema de reservas</p>
+    </div>
+    <span class="dash-date">{{ today | date:'EEEE, d MMMM yyyy' }}</span>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card kpi-blue">
+      <div class="kpi-icon"><i class="fa-solid fa-calendar-check"></i></div>
+      <div class="kpi-info">
+        <span class="kpi-label">Total reservas</span>
+        <span class="kpi-value">{{ stats.totalReservas }}</span>
+      </div>
+    </div>
+    <div class="kpi-card kpi-green">
+      <div class="kpi-icon"><i class="fa-solid fa-door-open"></i></div>
+      <div class="kpi-info">
+        <span class="kpi-label">Habitaciones disponibles</span>
+        <span class="kpi-value">{{ stats.habitacionesDisponibles }}</span>
+      </div>
+    </div>
+    <div class="kpi-card kpi-amber">
+      <div class="kpi-icon"><i class="fa-solid fa-coins"></i></div>
+      <div class="kpi-info">
+        <span class="kpi-label">Ingresos del mes</span>
+        <span class="kpi-value">₡{{ stats.ingresosMes | number:'1.0-0' }}</span>
+      </div>
+    </div>
+    <div class="kpi-card kpi-purple">
+      <div class="kpi-icon"><i class="fa-solid fa-users"></i></div>
+      <div class="kpi-info">
+        <span class="kpi-label">Clientes registrados</span>
+        <span class="kpi-value">{{ stats.totalClientes }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts row -->
+  <div class="charts-row">
+
+    <!-- Reservas por estado -->
+    <div class="chart-card">
+      <h2 class="chart-title">Reservas por estado</h2>
+      <div class="donut-wrap">
+        <canvas id="chartEstado" role="img" aria-label="Gráfico de reservas por estado">
+          Confirmadas, Pendientes, Canceladas.
+        </canvas>
+      </div>
+      <div class="chart-legend">
+        <span class="leg-item"><span class="leg-dot" style="background:#1D9E75"></span>Confirmadas {{ stats.confirmadas }}</span>
+        <span class="leg-item"><span class="leg-dot" style="background:#BA7517"></span>Pendientes {{ stats.pendientes }}</span>
+        <span class="leg-item"><span class="leg-dot" style="background:#E24B4A"></span>Canceladas {{ stats.canceladas }}</span>
+      </div>
+    </div>
+
+    <!-- Ingresos por mes -->
+    <div class="chart-card chart-card--wide">
+      <h2 class="chart-title">Ingresos mensuales</h2>
+      <div style="position:relative; width:100%; height:220px;">
+        <canvas id="chartIngresos" role="img" aria-label="Gráfico de ingresos mensuales">
+          Ingresos de enero a junio 2026.
+        </canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom row -->
+  <div class="bottom-row">
+
+    <!-- Últimas reservas -->
+    <div class="table-card">
+      <h2 class="chart-title">Últimas reservas</h2>
+      <table class="dash-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Cliente</th>
+            <th>Recepcionista</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of ultimasReservas">
+            <td>{{ r.idReserva }}</td>
+            <td>{{ r.cliente }}</td>
+            <td>{{ r.recepcionista }}</td>
+            <td>{{ r.fecha | date:'dd/MM/yy' }}</td>
+            <td>
+              <span class="badge"
+                [ngClass]="{
+                  'badge-green': r.estado === 'Confirmada',
+                  'badge-amber': r.estado === 'Pendiente',
+                  'badge-red':   r.estado === 'Cancelada'
+                }">
+                {{ r.estado }}
+              </span>
+            </td>
+            <td>₡{{ r.total | number:'1.0-0' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Habitaciones -->
+    <div class="rooms-card">
+      <h2 class="chart-title">Estado de habitaciones</h2>
+      <div class="room-list">
+        <div class="room-item" *ngFor="let h of habitaciones">
+          <div class="room-num">{{ h.numero }}</div>
+          <div class="room-info">
+            <span class="room-tipo">{{ h.tipo }}</span>
+            <span class="room-estado"
+              [ngClass]="{
+                'estado-libre':    h.estado === 'Disponible',
+                'estado-ocupada':  h.estado === 'Ocupada',
+                'estado-mant':     h.estado === 'Mantenimiento'
+              }">
+              {{ h.estado }}
+            </span>
+          </div>
+          <i class="fa-solid"
+            [ngClass]="{
+              'fa-circle-check':    h.estado === 'Disponible',
+              'fa-circle-xmark':    h.estado === 'Ocupada',
+              'fa-circle-exclamation': h.estado === 'Mantenimiento'
+            }"
+            [style.color]="h.estado === 'Disponible' ? '#1D9E75' : h.estado === 'Ocupada' ? '#E24B4A' : '#BA7517'">
+          </i>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

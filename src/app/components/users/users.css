@@ -1,23 +1,23 @@
-.usr-page {
+.app-page {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.usr-page-header {
+.app-page-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.usr-title {
+.app-title {
   font-size: 22px;
   font-weight: 600;
   color: #1e293b;
   margin: 0 0 4px;
 }
 
-.usr-breadcrumb {
+.app-breadcrumb {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -25,12 +25,12 @@
   color: #94a3b8;
 }
 
-.usr-breadcrumb i { font-size: 10px; }
+.app-breadcrumb i { font-size: 10px; }
 
-.usr-breadcrumb-active { color: #2563eb; }
+.app-breadcrumb-active { color: #2563eb; }
 
 /* Botón "Nuevo Usuario" del header */
-.usr-btn-primary {
+.app-btn-primary {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -45,4 +45,4 @@
   transition: background 0.15s;
 }
 
-.usr-btn-primary:hover { background: #1d4ed8; }
+.app-btn-primary:hover { background: #1d4ed8; }

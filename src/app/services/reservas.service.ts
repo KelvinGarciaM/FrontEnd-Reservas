@@ -12,7 +12,7 @@ export class ReservasService {
   private url: string;
 
   constructor(private _http: HttpClient) {
-    this.url = enviroment.apiUrl + 'reservas/';
+    this.url = enviroment.apiUrl + 'reservas';
   }
 
   getReservas(): Observable<Reserva[]> {
@@ -36,10 +36,13 @@ export class ReservasService {
   }
 
   updateReserva(id: number, reserva: Reserva): Observable<any> {
-    return this._http.put(`${this.url}${id}`, reserva);
+    return this._http.put(`${this.url}/${id}`, reserva);
   }
 
   deleteReserva(id: number): Observable<any> {
-    return this._http.delete(`${this.url}${id}`);
+    return this._http.delete(`${this.url}/${id}`);
   }
+  updateEstadoReserva(id: number, estadoReserva: string): Observable<any> {
+  return this._http.patch(`${this.url}/${id}/estado`, { estadoReserva });
+}
 }
