@@ -50,7 +50,8 @@
               <button class="app-btn-action app-btn-edit" (click)="editUser.emit(u)" title="Editar"  [disabled]="u.estado === 0">
                 <i class="fa-solid fa-pen"></i>
               </button>
-              <button class="app-btn-action" (click)="deleteUser.emit(u.id!)">
+            
+              <button class="app-btn-action" (click)="deleteUser.emit(u.id!)" [disabled]="currentUser?.email === u.email">
 
                 <i class="fa-solid" [class]="u.estado === 1 ? 'fa-user-slash' : 'fa-user-check'">
                 </i>

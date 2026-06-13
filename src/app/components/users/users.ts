@@ -4,6 +4,7 @@ import { UserService } from '../../services/users.service';
 import { UserFormComponent } from './user-form/user-form';
 import { UserTableComponent } from './user-table/user-table';
 
+
 @Component({
   selector: 'app-users',
   standalone: true,
@@ -21,7 +22,7 @@ export class UsersComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private cdr: ChangeDetectorRef 
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
