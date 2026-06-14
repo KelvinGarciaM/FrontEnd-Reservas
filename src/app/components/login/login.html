@@ -2,15 +2,22 @@
 
   <div class="lg-card">
 
+    <!-- LOGO -->
     <div class="lg-logo">
-      <div class="lg-logo-icon">
-        <i class="fa-solid fa-building"></i>
-      </div>
-      <span class="lg-logo-text">Hotel</span>
+      <img
+        src="/assets/images/logo.png"
+        alt="Logo Hotel"
+        class="lg-logo-img">
     </div>
 
+    <!-- TÍTULO -->
     <h2 class="lg-title">Iniciar sesión</h2>
-    <p class="lg-subtitle">Ingresa tus credenciales para continuar</p>
+
+    <p class="lg-subtitle">
+      Ingresa tus credenciales para continuar
+    </p>
+
+    <!-- MENSAJES -->
 
     @if(status() === 0) {
     <div class="lg-alert lg-alert-danger">
@@ -25,26 +32,47 @@
       Error del servidor
     </div>
     }
+    <!-- FORMULARIO -->
 
     <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
 
       <div class="lg-field">
-        <label class="lg-label">Correo electrónico</label>
+
+        <label class="lg-label">
+          Correo electrónico
+        </label>
+
         <div class="lg-input-wrap">
           <i class="fa-solid fa-envelope lg-input-icon"></i>
-          <input type="email" name="email" class="lg-input"
-                 placeholder="correo@ejemplo.com"
-                 [(ngModel)]="user.email" required />
+
+          <input
+            type="email"
+            name="email"
+            class="lg-input"
+            placeholder="correo@ejemplo.com"
+            [(ngModel)]="user.email"
+            required>
+
         </div>
       </div>
 
       <div class="lg-field">
-        <label class="lg-label">Contraseña</label>
+
+        <label class="lg-label">
+          Contraseña
+        </label>
+
         <div class="lg-input-wrap">
           <i class="fa-solid fa-lock lg-input-icon"></i>
-          <input type="password" name="password" class="lg-input"
-                 placeholder="••••••••"
-                 [(ngModel)]="user.password" required />
+
+          <input
+            type="password"
+            name="password"
+            class="lg-input"
+            placeholder="••••••••"
+            [(ngModel)]="user.password"
+            required>
+
         </div>
       </div>
 
