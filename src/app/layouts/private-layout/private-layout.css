@@ -24,18 +24,6 @@
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
-.hl-logo-icon {
-  width: 32px;
-  height: 32px;
-  background: #2563eb;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 15px;
-}
-
 .hl-logo-text {
   color: #fffffffd;
   font-size: 15px;
@@ -362,4 +350,10 @@
 
 .hl-collapsed .hl-sub-toggle .hl-chevron {
   display: none;
+}
+.hl-logo-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
