@@ -20,28 +20,27 @@ import { ReservasDetalle } from '../reservas-detalle/reservas-detalle';
 export class ReservaForm implements OnInit, OnChanges {
 
   @Input() editingReserva: Reserva | null = null;
-  @Output() formClosed   = new EventEmitter<void>();
+  @Output() formClosed = new EventEmitter<void>();
   @Output() reservaSaved = new EventEmitter<void>();
 
-  minDate: string = new Date().toISOString().slice(0, 16);
+  minDate: string = '';
 
   reserva: Reserva = new Reserva();
-  editMode         = false;
-  loading          = false;
-  reservaGuardada  = false;
+  originalReserva: Reserva | null = null;
+  editMode = false;
+  loading = false;
+  reservaGuardada = false;
   idReservaCreada: number | null = null;
 
   mostrarDatosReserva = true;
   mostrarHabitaciones = true;
 
-  // cliente
-  cedulaCliente     = '';
+  cedulaCliente = '';
   clienteEncontrado: Cliente | null = null;
-  buscandoCliente   = false;
-  clienteError      = '';
+  buscandoCliente = false;
+  clienteError = '';
 
-  // recepcionista
-  esAdmin           = false;
+  esAdmin = false;
   recepcionistas: Recepcionista[] = [];
 
   estadosReserva = ['Pendiente', 'Confirmada', 'Cancelada', 'Finalizada'];
@@ -49,12 +48,35 @@ export class ReservaForm implements OnInit, OnChanges {
   constructor(
     private reservaService: ReservasService,
     private clienteService: ClienteService,
-    private recepService:   RecepcionistaService,
-    public  authService:    AuthService,
-    private cdr:            ChangeDetectorRef
-  ) {}
+    private recepService: RecepcionistaService,
+    public authService: AuthService,
+    private cdr: ChangeDetectorRef
+  ) { }
+
+  private getFechaLocalISO(): string {
+    const now = new Date();
+    const offset = now.getTimezoneOffset() * 60000;
+    return new Date(now.getTime() - offset).toISOString().slice(0, 16);
+  }
+
+  get hasChanges(): boolean {
+    if (!this.editMode || !this.originalReserva) return true;
+    return JSON.stringify(this.reserva) !== JSON.stringify(this.originalReserva);
+  }
+
+  get recepcionistaValido(): boolean {
+    if (!this.esAdmin) return true;
+    return this.reserva.idRecepcionista !== '0' && !!this.reserva.idRecepcionista;
+  }
 
   ngOnInit(): void {
+    const localISO = this.getFechaLocalISO();
+    this.minDate = localISO;
+    // Solo setear la fecha si NO estamos en edición (ngOnChanges ya la habrá seteado)
+    if (!this.editMode) {
+      this.reserva.fechaReserva = localISO;
+    }
+
     const user = this.authService.currentUser();
     this.esAdmin = user?.role === 'Administrador';
 
@@ -62,6 +84,20 @@ export class ReservaForm implements OnInit, OnChanges {
       this.recepService.getRecepcionistas().subscribe({
         next: (data) => {
           this.recepcionistas = data;
+
+          if (this.editMode && this.reserva.idRecepcionista && this.reserva.idRecepcionista !== '0') {
+            // EDICIÓN: el idRecepcionista ya viene casteado a string desde ngOnChanges,
+            // solo sincronizar originalReserva por si acaso
+            const idStr = String(this.reserva.idRecepcionista);
+            this.reserva.idRecepcionista = idStr;
+            if (this.originalReserva) {
+              this.originalReserva = { ...this.originalReserva, idRecepcionista: idStr };
+            }
+          } else if (!this.editMode) {
+            // NUEVA RESERVA: mostrar "Seleccionar recepcionista"
+            this.reserva.idRecepcionista = '0';
+          }
+
           this.cdr.detectChanges();
         },
         error: () => this.recepcionistas = []
@@ -73,15 +109,25 @@ export class ReservaForm implements OnInit, OnChanges {
 
   ngOnChanges(): void {
     if (this.editingReserva) {
-      this.reserva       = { ...this.editingReserva };
-      this.editMode      = true;
+      this.reserva = { ...this.editingReserva };
+      this.editMode = true;
       this.cedulaCliente = this.reserva.idCliente;
 
+      // Castear idRecepcionista a string antes de guardar el original
+      // para que ambos tengan el mismo tipo y hasChanges funcione bien
+      if (this.reserva.idRecepcionista) {
+        this.reserva.idRecepcionista = String(this.reserva.idRecepcionista);
+      }
+
       if (this.reserva.fechaReserva) {
-        this.reserva.fechaReserva = new Date(this.reserva.fechaReserva)
+        const fecha = new Date(this.reserva.fechaReserva);
+        const offset = fecha.getTimezoneOffset() * 60000;
+        this.reserva.fechaReserva = new Date(fecha.getTime() - offset)
           .toISOString().slice(0, 16);
       }
 
+      // Guardar snapshot DESPUÉS de todos los casteos/normalizaciones
+      this.originalReserva = { ...this.reserva };
       this.buscarCliente();
     } else {
       this.resetForm();
@@ -92,25 +138,27 @@ export class ReservaForm implements OnInit, OnChanges {
   buscarCliente(): void {
     if (!this.cedulaCliente || this.cedulaCliente.length < 3) {
       this.clienteEncontrado = null;
-      this.clienteError      = '';
+      this.clienteError = '';
       return;
     }
 
     this.buscandoCliente = true;
-    this.clienteError    = '';
+    this.clienteError = '';
 
     this.clienteService.getClienteByCedula(this.cedulaCliente).subscribe({
       next: (cliente) => {
         this.clienteEncontrado = cliente;
         this.reserva.idCliente = this.cedulaCliente;
-        this.buscandoCliente   = false;
+        this.buscandoCliente = false;
         this.cdr.detectChanges();
       },
-      error: () => {
+      error: (err) => {
         this.clienteEncontrado = null;
-        this.clienteError      = 'Cliente no encontrado';
+        this.clienteError = err.status === 404
+          ? 'Cliente no encontrado'
+          : 'Error al buscar cliente. Intenta de nuevo.';
         this.reserva.idCliente = '';
-        this.buscandoCliente   = false;
+        this.buscandoCliente = false;
         this.cdr.detectChanges();
       }
     });
@@ -124,17 +172,18 @@ export class ReservaForm implements OnInit, OnChanges {
       return;
     }
 
-    if (!this.reserva.idRecepcionista) {
+    if (!this.recepcionistaValido) {
       Swal.fire({ icon: 'warning', title: 'Recepcionista requerido', text: 'Debes seleccionar un recepcionista.' });
       return;
     }
 
     this.loading = true;
+    this.cdr.detectChanges();
     const wasEditing = this.editMode;
 
     const body = {
       ...this.reserva,
-      fechaReserva:  new Date(this.reserva.fechaReserva).toISOString(),
+      fechaReserva: new Date(this.reserva.fechaReserva).toISOString(),
       estadoReserva: wasEditing ? this.reserva.estadoReserva : 'Pendiente'
     };
 
@@ -181,24 +230,37 @@ export class ReservaForm implements OnInit, OnChanges {
   }
 
   finalizar(): void {
+    Swal.fire({
+      icon: 'success',
+      title: 'Éxito',
+      text: 'Cambios guardados correctamente'
+    });
+
     this.reservaSaved.emit();
     this.resetForm();
     this.formClosed.emit();
   }
 
   resetForm(): void {
-    this.reserva           = new Reserva();
-    this.editMode          = false;
-    this.loading           = false;
-    this.reservaGuardada   = false;
-    this.idReservaCreada   = null;
-    this.cedulaCliente     = '';
+    this.reserva = new Reserva();
+    this.originalReserva = null;
+    this.editMode = false;
+    this.loading = false;
+    this.reservaGuardada = false;
+    this.idReservaCreada = null;
+    this.cedulaCliente = '';
     this.clienteEncontrado = null;
-    this.clienteError      = '';
+    this.clienteError = '';
     this.mostrarDatosReserva = true;
     this.mostrarHabitaciones = true;
 
-    if (!this.esAdmin) {
+    const localISO = this.getFechaLocalISO();
+    this.minDate = localISO;
+    this.reserva.fechaReserva = localISO;
+
+    if (this.esAdmin) {
+      this.reserva.idRecepcionista = '0';
+    } else {
       this.reserva.idRecepcionista = this.authService.currentUser()?.cedula ?? '';
     }
   }
@@ -207,24 +269,36 @@ export class ReservaForm implements OnInit, OnChanges {
     this.formClosed.emit();
   }
 
-  onTotalesChanged(totales: {iva: number, subTotal: number, total: number}): void {
-    this.reserva.iva      = totales.iva;
-    this.reserva.subTotal = totales.subTotal;
-    this.reserva.total    = totales.total;
-
+  onTotalesChanged(totales: { iva: number, subTotal: number, total: number }): void {
     const id = this.reserva.idReserva || this.idReservaCreada;
     if (!id) return;
 
+    // Si los totales no cambiaron, no hacer la llamada al backend
+    // (evita el request innecesario al cargar el formulario de edición)
+    if (
+      this.reserva.iva === totales.iva &&
+      this.reserva.subTotal === totales.subTotal &&
+      this.reserva.total === totales.total
+    ) return;
+
+    this.reserva.iva = totales.iva;
+    this.reserva.subTotal = totales.subTotal;
+    this.reserva.total = totales.total;
+
     const body = {
       ...this.reserva,
-      idReserva:    id,
+      idReserva: id,
       fechaReserva: new Date(this.reserva.fechaReserva).toISOString(),
-      iva:          totales.iva,
-      subTotal:     totales.subTotal,
-      total:        totales.total
+      iva: totales.iva,
+      subTotal: totales.subTotal,
+      total: totales.total
     };
 
-    this.reservaService.updateReserva(id, body).subscribe();
-    this.cdr.detectChanges();
+    this.reservaService.updateReserva(id, body).subscribe({
+      next: () => this.cdr.detectChanges(),
+      error: () => {
+        Swal.fire({ icon: 'error', title: 'Error', text: 'No se pudieron actualizar los totales.' });
+      }
+    });
   }
 }

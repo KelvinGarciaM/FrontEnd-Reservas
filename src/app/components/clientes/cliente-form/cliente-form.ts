@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Cliente } from '../../../models/cliente';
 import { TipoCliente } from '../../../models/tipo-cliente';
@@ -21,11 +21,13 @@ export class ClienteFormComponent implements OnInit, OnChanges {
   @Output() clienteSaved = new EventEmitter<void>();
 
   cliente: Cliente = new Cliente();
+  originalCliente: Cliente | null = null; 
   tiposCliente: TipoCliente[] = [];
 
   constructor(
     private clienteService: ClienteService,
-    private tipoClienteService: TipoClienteService
+    private tipoClienteService: TipoClienteService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -34,16 +36,27 @@ export class ClienteFormComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['editingCliente']) {
-      this.cliente = this.editingCliente
-        ? { ...this.editingCliente }
-        : new Cliente();
+      if (this.editingCliente) {
+        this.cliente = { ...this.editingCliente };
+        this.originalCliente = { ...this.editingCliente }; 
+      } else {
+        this.cliente = new Cliente();
+        this.originalCliente = null; 
+      }
     }
+  }
+
+  //  true si hay cambios (o es creación nueva)
+  get hasChanges(): boolean {
+    if (!this.editingCliente || !this.originalCliente) return true;
+    return JSON.stringify(this.cliente) !== JSON.stringify(this.originalCliente);
   }
 
   loadTiposCliente(): void {
     this.tipoClienteService.getTipoClientes().subscribe({
       next: (data) => {
         this.tiposCliente = data.filter((tc: TipoCliente) => Number(tc.estado) === 1);
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error(err);
@@ -57,27 +70,22 @@ export class ClienteFormComponent implements OnInit, OnChanges {
       Swal.fire('Campo requerido', 'Debe ingresar la cédula.', 'warning');
       return;
     }
-
     if (!this.cliente.idTipoCliente) {
       Swal.fire('Campo requerido', 'Debe seleccionar un tipo de cliente.', 'warning');
       return;
     }
-
     if (!this.cliente.nombre.trim()) {
       Swal.fire('Campo requerido', 'Debe ingresar el nombre.', 'warning');
       return;
     }
-
     if (!this.cliente.apellidos.trim()) {
       Swal.fire('Campo requerido', 'Debe ingresar los apellidos.', 'warning');
       return;
     }
-
     if (!this.cliente.telefono.trim()) {
       Swal.fire('Campo requerido', 'Debe ingresar el teléfono.', 'warning');
       return;
     }
-
     if (!this.cliente.direccion.trim()) {
       Swal.fire('Campo requerido', 'Debe ingresar la dirección.', 'warning');
       return;
@@ -109,11 +117,9 @@ export class ClienteFormComponent implements OnInit, OnChanges {
           timer: 1500,
           showConfirmButton: false
         });
-
         this.clienteSaved.emit();
       },
       error: (err) => {
-        console.error(err);
         Swal.fire('Error', err.error?.Error || 'No se pudo registrar el cliente.', 'error');
       }
     });
@@ -139,11 +145,9 @@ export class ClienteFormComponent implements OnInit, OnChanges {
           timer: 1500,
           showConfirmButton: false
         });
-
         this.clienteSaved.emit();
       },
       error: (err) => {
-        console.error(err);
         Swal.fire('Error', err.error?.error || 'No se pudo actualizar el cliente.', 'error');
       }
     });

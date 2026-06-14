@@ -193,3 +193,87 @@
 
 
 
+@media (max-width: 768px) {
+  .app-card {
+    overflow: visible;
+  }
+
+  .app-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .app-card-header > div {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .app-search-box {
+    flex: 1;
+  }
+
+  .app-search-box input {
+    width: 100%;
+  }
+
+  .app-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .app-table thead {
+    display: none;
+  }
+
+  .app-table,
+  .app-table tbody,
+  .app-table tr,
+  .app-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .app-table tr {
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 10px;
+    margin: 12px 16px;
+    padding: 12px;
+    width: calc(100% - 32px);
+  }
+
+  .app-table tr:hover td {
+    background: transparent;
+  }
+
+  .app-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    border: none;
+  }
+
+  .app-table td:not(:last-child) {
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+
+  .app-table td::before {
+    content: attr(data-label);
+    font-weight: 500;
+    color: #64748b;
+    font-size: 12px;
+    flex-shrink: 0;
+    margin-right: 12px;
+  }
+
+  .rsv-pagination {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .rsv-pagination-btns {
+    flex-wrap: wrap;
+  }
+}

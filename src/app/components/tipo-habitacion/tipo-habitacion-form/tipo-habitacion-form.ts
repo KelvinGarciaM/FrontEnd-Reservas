@@ -19,6 +19,7 @@ export class TipoHabitacionFormComponent implements OnChanges {
   @Output() tipoSaved = new EventEmitter<void>();
 
   tipoHabitacion: TipoHabitacion = new TipoHabitacion();
+  originalTipo: TipoHabitacion | null = null; 
   editMode = false;
   loading = false;
 
@@ -30,11 +31,17 @@ export class TipoHabitacionFormComponent implements OnChanges {
   ngOnChanges(): void {
     if (this.editingTipo) {
       this.tipoHabitacion = { ...this.editingTipo };
+      this.originalTipo = { ...this.editingTipo }; 
       this.editMode = true;
     } else {
       this.resetForm();
     }
     this.cdr.detectChanges();
+  }
+
+  get hasChanges(): boolean {
+    if (!this.editMode || !this.originalTipo) return true;
+    return JSON.stringify(this.tipoHabitacion) !== JSON.stringify(this.originalTipo);
   }
 
   onSubmit(form: any): void {
@@ -65,7 +72,6 @@ export class TipoHabitacionFormComponent implements OnChanges {
           title: 'Error',
           text: typeof message === 'string' ? message : 'No se pudo guardar el tipo de habitación.'
         });
-        console.error('TipoHabitacion save error:', err);
         this.cdr.detectChanges();
       }
     });
@@ -73,6 +79,7 @@ export class TipoHabitacionFormComponent implements OnChanges {
 
   resetForm(): void {
     this.tipoHabitacion = new TipoHabitacion();
+    this.originalTipo = null; 
     this.editMode = false;
     this.loading = false;
   }
@@ -81,4 +88,3 @@ export class TipoHabitacionFormComponent implements OnChanges {
     this.formClosed.emit();
   }
 }
-

@@ -21,6 +21,7 @@ export class UserFormComponent implements OnChanges {
   @Output() userSaved  = new EventEmitter<void>();
 
   user: User = new User(null, '', '', '', 1, '', '', '');
+  originalUser: User | null = null;
   editMode     = false;
   loading      = false;
   status       = -1;
@@ -44,6 +45,7 @@ export class UserFormComponent implements OnChanges {
           this.user.cedula = (this.editingUser.cedula as any)?.String !== undefined
             ? (this.editingUser.cedula as any).String
             : (this.editingUser.cedula ?? '');
+          this.originalUser = { ...this.user }; // guarda original después de normalizar cedula
           this.editMode    = true;
 
           if (this.editingUser.image) {
@@ -68,6 +70,12 @@ export class UserFormComponent implements OnChanges {
     });
   }
 
+  get hasChanges(): boolean {
+    if (!this.editMode || !this.originalUser) return true;
+    if (this.selectedFile) return true; // nueva imagen = hay cambio
+    return JSON.stringify(this.user) !== JSON.stringify(this.originalUser);
+  }
+
   onRoleChange(): void {
     if (this.user.role !== 'Recepcionista') {
       this.user.cedula = '';
@@ -85,62 +93,64 @@ export class UserFormComponent implements OnChanges {
     };
     reader.readAsDataURL(file);
   }
-onSubmit(form: any): void {
-  if (form.invalid) return;
 
-  if (this.user.role === 'Recepcionista' && !this.user.cedula) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Recepcionista requerido',
-      text: 'Debes seleccionar un recepcionista para este usuario.'
-    });
-    return;
-  }
+  onSubmit(form: any): void {
+    if (form.invalid) return;
 
-  this.loading = true;
-  this.status  = -1;
-  const wasEditing = this.editMode; // ← guarda antes de resetear
-
-  const request$ = this.selectedFile
-    ? this.userService.uploadImage(this.selectedFile).pipe(
-        switchMap((res: any) => {
-          this.user.image = res.filename;
-          return wasEditing
-            ? this.userService.updateUser(this.user)
-            : this.userService.register(this.user);
-        })
-      )
-    : wasEditing
-      ? this.userService.updateUser(this.user)
-      : this.userService.register(this.user);
-
-  request$.subscribe({
-    next: () => {
-      this.loading = false;
-      this.userSaved.emit();
-      this.resetForm();
+    if (this.user.role === 'Recepcionista' && !this.user.cedula) {
       Swal.fire({
-        icon: 'success',
-        title: '¡Listo!',
-        text: wasEditing ? 'Usuario actualizado correctamente.' : 'Usuario creado correctamente.',
-        timer: 1500,
-        showConfirmButton: false
-      }).then(() => this.formClosed.emit());
-    },
-    error: (err) => {
-      this.loading = false;
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: err.status === 400 ? 'El correo ya está registrado.' : 'Error al guardar el usuario.'
+        icon: 'warning',
+        title: 'Recepcionista requerido',
+        text: 'Debes seleccionar un recepcionista para este usuario.'
       });
-      this.cdr.detectChanges();
+      return;
     }
-  });
-}
+
+    this.loading = true;
+    this.status  = -1;
+    const wasEditing = this.editMode;
+
+    const request$ = this.selectedFile
+      ? this.userService.uploadImage(this.selectedFile).pipe(
+          switchMap((res: any) => {
+            this.user.image = res.filename;
+            return wasEditing
+              ? this.userService.updateUser(this.user)
+              : this.userService.register(this.user);
+          })
+        )
+      : wasEditing
+        ? this.userService.updateUser(this.user)
+        : this.userService.register(this.user);
+
+    request$.subscribe({
+      next: () => {
+        this.loading = false;
+        this.userSaved.emit();
+        this.resetForm();
+        Swal.fire({
+          icon: 'success',
+          title: '¡Listo!',
+          text: wasEditing ? 'Usuario actualizado correctamente.' : 'Usuario creado correctamente.',
+          timer: 1500,
+          showConfirmButton: false
+        }).then(() => this.formClosed.emit());
+      },
+      error: (err) => {
+        this.loading = false;
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: err.status === 400 ? 'El correo ya está registrado.' : 'Error al guardar el usuario.'
+        });
+        this.cdr.detectChanges();
+      }
+    });
+  }
 
   resetForm(): void {
     this.user         = new User(null, '', '', '', 1, '', '', '');
+    this.originalUser = null;
     this.editMode     = false;
     this.status       = -1;
     this.imagePreview = null;

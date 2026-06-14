@@ -22,6 +22,7 @@ export class HabitacionFormComponent implements OnChanges {
   @Output() habitacionSaved = new EventEmitter<void>();
 
   habitacion: Habitacion = new Habitacion();
+  originalHabitacion: Habitacion | null = null; 
   tiposHabitacion: TipoHabitacion[] = [];
 
   editMode = false;
@@ -38,36 +39,38 @@ export class HabitacionFormComponent implements OnChanges {
   ngOnChanges(): void {
     if (this.editingHabitacion) {
       this.habitacion = { ...this.editingHabitacion };
+      this.originalHabitacion = { ...this.editingHabitacion }; 
       this.editMode = true;
     } else {
       this.resetForm();
     }
-
     this.cdr.detectChanges();
   }
 
+  //  true si hay cambios (o es creación nueva)
+  get hasChanges(): boolean {
+    if (!this.editMode || !this.originalHabitacion) return true;
+    return JSON.stringify(this.habitacion) !== JSON.stringify(this.originalHabitacion);
+  }
+
   cargarTiposHabitacion(): void {
-  this.tipoHabitacionService.getTiposHabitacion().subscribe({
-    next: (res) => {
-      const datos = res.tipoHabitacion ?? [];
-
-      this.tiposHabitacion = datos
-        .map((t: any) => ({
-          idTipoHabitacion: t.idtipohabitacion,
-          nombreTipoHab: t.nombretipohab,
-          descripcion: t.descripcion,
-          capacidadMaxima: t.capacidadmaxima,
-          estado: t.estado
-        }))
-        .filter((t: TipoHabitacion) => t.estado === 1);
-
-      this.cdr.detectChanges();
-    },
-    error: (err) => {
-      console.log('Error cargando tipos habitación', err);
-    }
-  });
-}
+    this.tipoHabitacionService.getTiposHabitacion().subscribe({
+      next: (res) => {
+        const datos = res.tipoHabitacion ?? [];
+        this.tiposHabitacion = datos
+          .map((t: any) => ({
+            idTipoHabitacion: t.idtipohabitacion,
+            nombreTipoHab: t.nombretipohab,
+            descripcion: t.descripcion,
+            capacidadMaxima: t.capacidadmaxima,
+            estado: t.estado
+          }))
+          .filter((t: TipoHabitacion) => t.estado === 1);
+        this.cdr.detectChanges();
+      },
+      error: () => {}
+    });
+  }
 
   onSubmit(form: any): void {
     if (form.invalid) return;
@@ -82,7 +85,6 @@ export class HabitacionFormComponent implements OnChanges {
       next: () => {
         this.loading = false;
         this.habitacionSaved.emit();
-
         Swal.fire({
           icon: 'success',
           title: '¡Listo!',
@@ -93,16 +95,12 @@ export class HabitacionFormComponent implements OnChanges {
       },
       error: (err) => {
         this.loading = false;
-
         const message = err.error?.message || err.error?.error || 'No se pudo guardar la habitación.';
-
         Swal.fire({
           icon: 'error',
           title: 'Error',
           text: typeof message === 'string' ? message : 'No se pudo guardar la habitación.'
         });
-
-        console.error('Habitacion save error:', err);
         this.cdr.detectChanges();
       }
     });
@@ -110,6 +108,7 @@ export class HabitacionFormComponent implements OnChanges {
 
   resetForm(): void {
     this.habitacion = new Habitacion();
+    this.originalHabitacion = null;
     this.editMode = false;
     this.loading = false;
   }

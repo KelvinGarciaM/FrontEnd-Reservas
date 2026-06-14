@@ -53,12 +53,9 @@
                 Cancelar
             </button>
 
-            <button type="submit" class="usr-btn-primary" [disabled]="loading">
-
-                <i class="fa-solid fa-floppy-disk"></i>
-
-                {{ editMode ? 'Actualizar' : 'Guardar' }}
-            </button>
+           <button type="submit" class="usr-btn-primary" [disabled]="loading || !hasChanges">
+  {{ editMode ? 'Actualizar' : 'Guardar' }}
+</button>
 
         </div>
 

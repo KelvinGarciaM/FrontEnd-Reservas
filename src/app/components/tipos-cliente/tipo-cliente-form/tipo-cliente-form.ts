@@ -12,19 +12,29 @@ import Swal from 'sweetalert2';
 })
 export class TipoClienteFormComponent implements OnChanges {
   @Input() editingTipoCliente: TipoCliente | null = null;
-  @Output() formClosed = new EventEmitter<void>()
+  @Output() formClosed = new EventEmitter<void>();
   @Output() tipoClienteSaved = new EventEmitter<void>();
 
   tipoCliente: TipoCliente = new TipoCliente();
+  originalTipoCliente: TipoCliente | null = null;
 
   constructor(private tipoClienteService: TipoClienteService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['editingTipoCliente']) {
-      this.tipoCliente = this.editingTipoCliente
-        ? { ...this.editingTipoCliente }
-        : new TipoCliente();
+      if (this.editingTipoCliente) {
+        this.tipoCliente = { ...this.editingTipoCliente };
+        this.originalTipoCliente = { ...this.editingTipoCliente };
+      } else {
+        this.tipoCliente = new TipoCliente();
+        this.originalTipoCliente = null;
+      }
     }
+  }
+
+  get hasChanges(): boolean {
+    if (!this.editingTipoCliente || !this.originalTipoCliente) return true;
+    return JSON.stringify(this.tipoCliente) !== JSON.stringify(this.originalTipoCliente);
   }
 
   saveTipoCliente(): void {
@@ -66,11 +76,9 @@ export class TipoClienteFormComponent implements OnChanges {
           timer: 1500,
           showConfirmButton: false
         });
-
         this.tipoClienteSaved.emit();
       },
-      error: (err) => {
-        console.error('Error creando tipo cliente:', err);
+      error: () => {
         Swal.fire('Error', 'No se pudo registrar el tipo de cliente.', 'error');
       }
     });
@@ -84,6 +92,7 @@ export class TipoClienteFormComponent implements OnChanges {
       descuentoBase: this.tipoCliente.descuentoBase.toString(),
       estado: this.tipoCliente.estado
     };
+
     this.tipoClienteService.updateTipoCliente(tipoClienteBody as any).subscribe({
       next: () => {
         Swal.fire({
@@ -93,11 +102,9 @@ export class TipoClienteFormComponent implements OnChanges {
           timer: 1500,
           showConfirmButton: false
         });
-
         this.tipoClienteSaved.emit();
       },
-      error: (err) => {
-        console.error('Error actualizando tipo cliente:', err);
+      error: () => {
         Swal.fire('Error', 'No se pudo actualizar el tipo de cliente.', 'error');
       }
     });
@@ -110,5 +117,4 @@ export class TipoClienteFormComponent implements OnChanges {
   closeForm(): void {
     this.formClosed.emit();
   }
-
 }

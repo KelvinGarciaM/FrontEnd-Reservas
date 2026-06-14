@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Cliente } from '../models/cliente';
 import { enviroment } from '../enviroments';
 
@@ -20,7 +21,9 @@ export class ClienteService {
   }
 
   getClienteByCedula(cedula: string): Observable<Cliente> {
-    return this._http.get<Cliente>(`${this.url}/${cedula}`);
+    return this._http.get<Cliente>(`${this.url}/${cedula}`).pipe(
+      catchError((err) => throwError(() => err)) 
+    );
   }
 
   createCliente(cliente: Cliente): Observable<any> {
@@ -35,7 +38,7 @@ export class ClienteService {
     return this._http.delete(this.url, { body: { cedula } });
   }
 
-   toggleClienteEstado(cedula: string): Observable<any>{
-    return this._http.put(`${this.url}/toggle`,{cedula});
+  toggleClienteEstado(cedula: string): Observable<any> {
+    return this._http.put(`${this.url}/toggle`, { cedula });
   }
 }

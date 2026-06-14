@@ -17,32 +17,33 @@ import Swal from 'sweetalert2';
 })
 export class ReservasDetalle implements OnInit, OnChanges, AfterViewInit {
 
-  @Input()  idReserva: number | null = null;
-  @Output() totalesChanged = new EventEmitter<{iva: number, subTotal: number, total: number}>();
+  @Input() idReserva: number | null = null;
+  @Output() totalesChanged = new EventEmitter<{ iva: number, subTotal: number, total: number }>();
   @ViewChild('inputEntrada') inputEntrada!: ElementRef;
 
-  detalles:       DetalleReserva[] = [];
-  habitaciones:   any[]            = [];
+  detalles: DetalleReserva[] = [];
+  habitaciones: any[] = [];
   fechasOcupadas: { fechaEntrada: string, fechaSalida: string }[] = [];
-  tarifaActiva:   any              = null;
-  loading         = false;
-  fechaConflicto  = false;
+  tarifaActiva: any = null;
+  loading = false;
+  fechaConflicto = false;
+  habitacionSeleccionada: any = null;
 
   nuevoDetalle = {
-    idHabitacion:     null as number | null,
+    idHabitacion: null as number | null,
     cantidadPersonas: 1,
-    fechaEntrada:     '',
-    fechaSalida:      ''
+    fechaEntrada: '',
+    fechaSalida: ''
   };
 
   minDate: string = new Date().toISOString().split('T')[0];
   private fpEntrada: any = null;
 
   constructor(
-    private detalleService:    DetalleReservaService,
+    private detalleService: DetalleReservaService,
     private habitacionService: HabitacionService,
-    private cdr:               ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
     this.loadHabitaciones();
@@ -62,34 +63,49 @@ export class ReservasDetalle implements OnInit, OnChanges, AfterViewInit {
     if (this.fpEntrada) this.fpEntrada.destroy();
 
     this.fpEntrada = flatpickr(this.inputEntrada.nativeElement, {
-      locale:     Spanish,
+      locale: Spanish,
       dateFormat: 'Y-m-d',
-      minDate:    'today',
-      mode:       'range',
-      disable:    [],
-      onChange:   (selectedDates: any[], dateStr: string) => {
+      minDate: 'today',
+      mode: 'range',
+      disable: [],
+      onChange: (selectedDates: any[], dateStr: string) => {
         if (selectedDates.length === 2) {
           const fmt = (d: Date) => d.toISOString().split('T')[0];
           this.nuevoDetalle.fechaEntrada = fmt(selectedDates[0]);
-          this.nuevoDetalle.fechaSalida  = fmt(selectedDates[1]);
+          this.nuevoDetalle.fechaSalida = fmt(selectedDates[1]);
           this.validarFechas();
           this.cargarTarifa();
         } else {
           this.nuevoDetalle.fechaEntrada = '';
-          this.nuevoDetalle.fechaSalida  = '';
-          this.tarifaActiva              = null;
+          this.nuevoDetalle.fechaSalida = '';
+          this.tarifaActiva = null;
         }
+
+
         this.cdr.detectChanges();
       }
     });
   }
 
   onHabitacionChange(): void {
+
+    if (!this.nuevoDetalle.idHabitacion) return;
+
+    // <- agregar esto
+    this.habitacionSeleccionada = this.habitaciones.find(
+      h => Number(h.idhabitacion) === Number(this.nuevoDetalle.idHabitacion)
+    );
+
+    this.nuevoDetalle.cantidadPersonas = 1;
+
+
+
+
     if (!this.nuevoDetalle.idHabitacion) return;
     this.nuevoDetalle.fechaEntrada = '';
-    this.nuevoDetalle.fechaSalida  = '';
-    this.fechaConflicto            = false;
-    this.tarifaActiva              = null;
+    this.nuevoDetalle.fechaSalida = '';
+    this.fechaConflicto = false;
+    this.tarifaActiva = null;
 
     if (this.fpEntrada) this.fpEntrada.clear();
 
@@ -98,7 +114,7 @@ export class ReservasDetalle implements OnInit, OnChanges, AfterViewInit {
         this.fechasOcupadas = data;
         const diasBloqueados = data.map((fo: any) => ({
           from: fo.fechaEntrada,
-          to:   fo.fechaSalida
+          to: fo.fechaSalida
         }));
         if (this.fpEntrada) this.fpEntrada.set('disable', diasBloqueados);
         this.cdr.detectChanges();
@@ -120,16 +136,26 @@ export class ReservasDetalle implements OnInit, OnChanges, AfterViewInit {
       error: () => this.tarifaActiva = null
     });
   }
+  validarPersonas(value: number): void {
+    const max = this.habitacionSeleccionada?.capacidadmaxima ?? 4;
+    let corrected = value;
+    if (value > max) corrected = max;
+    if (value < 1) corrected = 1;
 
+    setTimeout(() => {
+      this.nuevoDetalle.cantidadPersonas = corrected;
+      this.cdr.detectChanges();
+    }, 0);
+  }
   validarFechas(): void {
     if (!this.nuevoDetalle.fechaEntrada || !this.nuevoDetalle.fechaSalida) return;
 
     const entrada = new Date(this.nuevoDetalle.fechaEntrada);
-    const salida  = new Date(this.nuevoDetalle.fechaSalida);
+    const salida = new Date(this.nuevoDetalle.fechaSalida);
 
     this.fechaConflicto = this.fechasOcupadas.some((fo: any) => {
       const foEntrada = new Date(fo.fechaEntrada);
-      const foSalida  = new Date(fo.fechaSalida);
+      const foSalida = new Date(fo.fechaSalida);
       return entrada < foSalida && salida > foEntrada;
     });
 
@@ -137,7 +163,7 @@ export class ReservasDetalle implements OnInit, OnChanges, AfterViewInit {
   }
 
   loadHabitaciones(): void {
-    this.habitacionService.getHabitaciones().subscribe({
+    this.habitacionService.getHabitacionesDisponibles().subscribe({
       next: (data: any) => {
         this.habitaciones = data.habitaciones || data;
         this.cdr.detectChanges();
@@ -151,29 +177,29 @@ export class ReservasDetalle implements OnInit, OnChanges, AfterViewInit {
     this.detalleService.getDetallesByReserva(this.idReserva).subscribe({
       next: (data: any[]) => {
         this.detalles = data.map((d: any) => ({
-          idDetalleReserva:     d.idDetalleReserva,
-          idHabitacion:         null,
-          idReserva:            this.idReserva,
-          idTarifa:             null,
-          cantidadPersonas:     d.cantidadPersonas,
-          precioAplicado:       parseFloat(d.precioAplicado) || 0,
-          fechaEntrada:         d.fechaEntrada,
-          fechaSalida:          d.fechaSalida,
-          iva:                  parseFloat(d.iva)           || 0,
-          subTotal:             parseFloat(d.subTotal)      || 0,
-          total:                parseFloat(d.total)         || 0,
-          estado:               1,
+          idDetalleReserva: d.idDetalleReserva,
+          idHabitacion: null,
+          idReserva: this.idReserva,
+          idTarifa: null,
+          cantidadPersonas: d.cantidadPersonas,
+          precioAplicado: parseFloat(d.precioAplicado) || 0,
+          fechaEntrada: d.fechaEntrada,
+          fechaSalida: d.fechaSalida,
+          iva: parseFloat(d.iva) || 0,
+          subTotal: parseFloat(d.subTotal) || 0,
+          total: parseFloat(d.total) || 0,
+          estado: 1,
           nombreTipoHabitacion: d.nombreTipoHabitacion,
-          numeroHabitacion:     d.numeroHabitacion,
-          nombreTarifa:         d.nombreTarifa   || '',
-          descuentoBase:        parseFloat(d.descuentoBase) || 0
+          numeroHabitacion: d.numeroHabitacion,
+          nombreTarifa: d.nombreTarifa || '',
+          descuentoBase: parseFloat(d.descuentoBase) || 0
         }));
 
         // emite totales al padre
         this.totalesChanged.emit({
-          iva:      this.ivaTotal,
+          iva: this.ivaTotal,
           subTotal: this.subTotalReserva,
-          total:    this.totalReserva
+          total: this.totalReserva
         });
 
         this.cdr.detectChanges();
@@ -208,11 +234,11 @@ export class ReservasDetalle implements OnInit, OnChanges, AfterViewInit {
     this.loading = true;
 
     const body = {
-      idHabitacion:     Number(this.nuevoDetalle.idHabitacion),
-      idReserva:        Number(this.idReserva),
+      idHabitacion: Number(this.nuevoDetalle.idHabitacion),
+      idReserva: Number(this.idReserva),
       cantidadPersonas: Number(this.nuevoDetalle.cantidadPersonas),
-      fechaEntrada:     this.nuevoDetalle.fechaEntrada,
-      fechaSalida:      this.nuevoDetalle.fechaSalida
+      fechaEntrada: this.nuevoDetalle.fechaEntrada,
+      fechaSalida: this.nuevoDetalle.fechaSalida
     };
 
     this.detalleService.createDetalle(body).subscribe({
@@ -234,11 +260,11 @@ export class ReservasDetalle implements OnInit, OnChanges, AfterViewInit {
       icon: 'warning',
       title: '¿Eliminar habitación?',
       text: 'Se quitará esta habitación de la reserva.',
-      showCancelButton:   true,
-      confirmButtonText:  'Sí, eliminar',
-      cancelButtonText:   'Cancelar',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
       confirmButtonColor: '#dc2626',
-      cancelButtonColor:  '#64748b'
+      cancelButtonColor: '#64748b'
     }).then(result => {
       if (!result.isConfirmed) return;
       this.detalleService.deleteDetalle(id).subscribe({
@@ -252,9 +278,9 @@ export class ReservasDetalle implements OnInit, OnChanges, AfterViewInit {
   }
 
   resetNuevoDetalle(): void {
-    this.nuevoDetalle   = { idHabitacion: null, cantidadPersonas: 1, fechaEntrada: '', fechaSalida: '' };
+    this.nuevoDetalle = { idHabitacion: null, cantidadPersonas: 1, fechaEntrada: '', fechaSalida: '' };
     this.fechaConflicto = false;
-    this.tarifaActiva   = null;
+    this.tarifaActiva = null;
     if (this.fpEntrada) this.fpEntrada.clear();
   }
 

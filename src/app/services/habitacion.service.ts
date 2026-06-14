@@ -18,6 +18,9 @@ export class HabitacionService {
   getHabitaciones(): Observable<any> {
     return this._http.get(this.url);
   }
+  getHabitacionesDisponibles(): Observable<any> {
+    return this._http.get(`${this.url}/disponibles`);
+}
 
   getHabitacionById(id: number): Observable<any> {
     return this._http.get(`${this.url}/${id}`);

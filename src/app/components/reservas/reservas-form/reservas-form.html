@@ -27,11 +27,12 @@
       @if(esAdmin) {
       <div class="app-form-group">
         <label class="app-label">Recepcionista <span class="app-required">*</span></label>
+        <!-- ✅ FIX: el value de la opción vacía es '0' para que coincida con el valor inicial del modelo -->
         <select class="app-input" name="idRecepcionista"
                 [(ngModel)]="reserva.idRecepcionista"
                 [disabled]="reservaGuardada"
                 required>
-          <option value="" disabled selected>Seleccionar recepcionista</option>
+          <option value="0">Seleccionar recepcionista</option>
           @for(r of recepcionistas; track r.cedula) {
             <option [value]="r.cedula">{{ r.nombre }} {{ r.apellidos }}</option>
           }
@@ -47,7 +48,7 @@
 
       <div class="app-form-group">
         <label class="app-label">Fecha de reserva <span class="app-required">*</span></label>
-        <input type="datetime-local" class="app-input" name="fechaReserva"
+        <input type="datetime-local" class="app-input" name="fechaReserva" readonly
                [(ngModel)]="reserva.fechaReserva"
                [disabled]="reservaGuardada"
                required [min]="minDate" />
@@ -73,23 +74,23 @@
 
       @if(clienteEncontrado) {
         <div class="app-form-group">
-        <label class="app-label">Tipo de Cliente</label>
-        <input type="text" class="app-input"
-               [value]="clienteEncontrado.nombreTipoC " disabled />
-      </div>
-      <div class="app-form-group">
-        <label class="app-label">Nombre</label>
-        <input type="text" class="app-input"
-               [value]="clienteEncontrado.nombre + ' ' + clienteEncontrado.apellidos" disabled />
-      </div>
-      <div class="app-form-group">
-        <label class="app-label">Teléfono</label>
-        <input type="text" class="app-input" [value]="clienteEncontrado.telefono" disabled />
-      </div>
-      <div class="app-form-group">
-        <label class="app-label">Dirección</label>
-        <input type="text" class="app-input" [value]="clienteEncontrado.direccion" disabled />
-      </div>
+          <label class="app-label">Tipo de Cliente</label>
+          <input type="text" class="app-input"
+                 [value]="clienteEncontrado.nombreTipoC" disabled />
+        </div>
+        <div class="app-form-group">
+          <label class="app-label">Nombre</label>
+          <input type="text" class="app-input"
+                 [value]="clienteEncontrado.nombre + ' ' + clienteEncontrado.apellidos" disabled />
+        </div>
+        <div class="app-form-group">
+          <label class="app-label">Teléfono</label>
+          <input type="text" class="app-input" [value]="clienteEncontrado.telefono" disabled />
+        </div>
+        <div class="app-form-group">
+          <label class="app-label">Dirección</label>
+          <input type="text" class="app-input" [value]="clienteEncontrado.direccion" disabled />
+        </div>
       }
 
       <div class="app-form-group">
@@ -114,8 +115,21 @@
       <button type="button" class="app-btn-secondary" (click)="resetForm()">
         <i class="fa-solid fa-rotate-left"></i> Limpiar
       </button>
+
+      <!--
+        ✅ FIX — El botón se deshabilita si:
+          1. El formulario es inválido
+          2. Está cargando
+          3. No se encontró un cliente válido
+          4. Es admin y no ha seleccionado recepcionista (sigue en '0')
+          5. Es modo edición y NO ha cambiado nada respecto al original
+      -->
       <button type="submit" class="app-btn-primary"
-              [disabled]="reservaForm.invalid || loading || !clienteEncontrado">
+              [disabled]="reservaForm.invalid
+                          || loading
+                          || !clienteEncontrado
+                          || !recepcionistaValido
+                          || (editMode && !hasChanges)">
         @if(loading) {
           <i class="fa-solid fa-spinner fa-spin"></i> Guardando...
         } @else {
@@ -126,33 +140,32 @@
     </div>
     }
 
-    
-
   </form>
+
   <!-- HABITACIONES — aparece después de crear o al editar -->
-    @if(reservaGuardada || (editMode && reserva.idReserva)) {
+  @if(reservaGuardada || (editMode && reserva.idReserva)) {
 
-      <div class="det-header-toggle" (click)="mostrarHabitaciones = !mostrarHabitaciones">
-        <span class="det-title">
-          <i class="fa-solid fa-bed"></i> Habitaciones de la reserva
-        </span>
-        <i class="fa-solid fa-chevron-down"
-           [style.transform]="mostrarHabitaciones ? 'rotate(0deg)' : 'rotate(-90deg)'"
-           style="transition:transform 0.2s; color:#94a3b8; font-size:12px;"></i>
-      </div>
+    <div class="det-header-toggle" (click)="mostrarHabitaciones = !mostrarHabitaciones">
+      <span class="det-title">
+        <i class="fa-solid fa-bed"></i> Habitaciones de la reserva
+      </span>
+      <i class="fa-solid fa-chevron-down"
+         [style.transform]="mostrarHabitaciones ? 'rotate(0deg)' : 'rotate(-90deg)'"
+         style="transition:transform 0.2s; color:#94a3b8; font-size:12px;"></i>
+    </div>
 
-      @if(mostrarHabitaciones) {
-        <app-reserva-detalle
-  [idReserva]="idReservaCreada || reserva.idReserva"
-  (totalesChanged)="onTotalesChanged($event)">
-</app-reserva-detalle>
-      }
-
-      <div class="app-form-actions">
-        <button type="button" class="app-btn-primary" (click)="finalizar()">
-          <i class="fa-solid fa-check"></i> Finalizar
-        </button>
-      </div>
-
+    @if(mostrarHabitaciones) {
+      <app-reserva-detalle
+        [idReserva]="idReservaCreada || reserva.idReserva"
+        (totalesChanged)="onTotalesChanged($event)">
+      </app-reserva-detalle>
     }
+
+    <div class="app-form-actions">
+      <button type="button" class="app-btn-primary" (click)="finalizar()">
+        <i class="fa-solid fa-check"></i> Finalizar
+      </button>
+    </div>
+
+  }
 </div>

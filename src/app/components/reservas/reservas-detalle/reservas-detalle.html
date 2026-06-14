@@ -18,7 +18,11 @@
       <div class="app-form-group">
         <label class="app-label">Personas</label>
         <input type="number" class="app-input"
-               [(ngModel)]="nuevoDetalle.cantidadPersonas" min="1" max="10" />
+               [(ngModel)]="nuevoDetalle.cantidadPersonas"
+               min="1"
+               [max]="habitacionSeleccionada?.capacidadmaxima"
+               (ngModelChange)="validarPersonas($event)"
+               (blur)="validarPersonas(nuevoDetalle.cantidadPersonas)" />
       </div>
 
       <div class="app-form-group" style="grid-column: span 2;">
@@ -63,46 +67,48 @@
 
   <!-- TABLA DETALLES -->
   @if(detalles.length > 0) {
-  <table class="app-table">
-    <thead>
-      <tr>
-        <th>Habitación</th>
-        <th>Tipo</th>
-        <th>Tarifa</th>
-        <th>Descuento</th>
-        <th>Personas</th>
-        <th>Entrada</th>
-        <th>Salida</th>
-        <th>Precio</th>
-        <th>IVA</th>
-        <th>Total</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      @for(d of detalles; track d.idDetalleReserva) {
-      <tr>
-        <td>{{ d.numeroHabitacion }}</td>
-        <td>{{ d.nombreTipoHabitacion }}</td>
-        <td>{{ d.nombreTarifa }}</td>
-        <td>{{ d.descuentoBase }}%</td>
-        <td>{{ d.cantidadPersonas }}</td>
-        <td>{{ formatFecha(d.fechaEntrada) }}</td>
-        <td>{{ formatFecha(d.fechaSalida) }}</td>
-        <td>₡ {{ d.precioAplicado | number:'1.2-2' }}</td>
-        <td>₡ {{ d.iva | number:'1.2-2' }}</td>
-        <td>₡ {{ d.total | number:'1.2-2' }}</td>
-        <td>
-          <button class="app-btn-action app-btn-delete"
-                  (click)="eliminarDetalle(d.idDetalleReserva!)"
-                  title="Eliminar">
-            <i class="fa-solid fa-trash"></i>
-          </button>
-        </td>
-      </tr>
-      }
-    </tbody>
-  </table>
+  <div class="det-table-wrapper">
+    <table class="app-table">
+      <thead>
+        <tr>
+          <th>Habitación</th>
+          <th>Tipo</th>
+          <th>Tarifa</th>
+          <th>Descuento</th>
+          <th>Personas</th>
+          <th>Entrada</th>
+          <th>Salida</th>
+          <th>Precio</th>
+          <th>IVA</th>
+          <th>Total</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(d of detalles; track d.idDetalleReserva) {
+        <tr>
+          <td>{{ d.numeroHabitacion }}</td>
+          <td>{{ d.nombreTipoHabitacion }}</td>
+          <td>{{ d.nombreTarifa }}</td>
+          <td>{{ d.descuentoBase }}%</td>
+          <td>{{ d.cantidadPersonas }}</td>
+          <td>{{ formatFecha(d.fechaEntrada) }}</td>
+          <td>{{ formatFecha(d.fechaSalida) }}</td>
+          <td>₡ {{ d.precioAplicado | number:'1.2-2' }}</td>
+          <td>₡ {{ d.iva | number:'1.2-2' }}</td>
+          <td>₡ {{ d.total | number:'1.2-2' }}</td>
+          <td>
+            <button class="app-btn-action app-btn-delete"
+                    (click)="eliminarDetalle(d.idDetalleReserva!)"
+                    title="Eliminar">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 
   <!-- TOTALES -->
   <div class="det-totales">
@@ -110,6 +116,7 @@
     <span>IVA: <strong>₡ {{ ivaTotal | number:'1.2-2' }}</strong></span>
     <span class="det-total">Total: <strong>₡ {{ totalReserva | number:'1.2-2' }}</strong></span>
   </div>
+
   } @else {
   <p class="det-empty">No hay habitaciones agregadas aún.</p>
   }

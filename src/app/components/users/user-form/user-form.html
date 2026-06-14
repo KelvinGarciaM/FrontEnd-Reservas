@@ -76,7 +76,7 @@
       <button type="button" class="app-btn-secondary" (click)="resetForm()">
         <i class="fa-solid fa-rotate-left"></i> Limpiar
       </button>
-      <button type="submit" class="app-btn-primary" [disabled]="userForm.invalid || loading">
+      <button type="submit" class="app-btn-primary" [disabled]="userForm.invalid || loading || !hasChanges">
         @if(loading) {
         <i class="fa-solid fa-spinner fa-spin"></i> Guardando...
         } @else {

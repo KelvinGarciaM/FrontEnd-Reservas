@@ -17,51 +17,37 @@
         <label class="tc-label">
           Nombre <span class="tc-required">*</span>
         </label>
-        <input
-          type="text"
-          class="tc-input"
-          placeholder="Ej: Premium"
-          name="nombreTipoC"
-          [(ngModel)]="tipoCliente.nombreTipoC"
-          required />
+        <input type="text" class="tc-input" placeholder="Ej: Premium" name="nombreTipoC"
+          [(ngModel)]="tipoCliente.nombreTipoC" required />
       </div>
 
       <div class="tc-form-group">
         <label class="tc-label">
           Descuento base (%) <span class="tc-required">*</span>
         </label>
-        <input
-          type="number"
-          class="tc-input"
-          placeholder="Ej: 10"
-          name="descuentoBase"
-          [(ngModel)]="tipoCliente.descuentoBase"
-          min="0"
-          required />
+        <input type="number" class="tc-input" placeholder="Ej: 10" name="descuentoBase"
+          [(ngModel)]="tipoCliente.descuentoBase" min="0" required />
       </div>
 
       <div class="tc-form-group tc-form-group-full">
         <label class="tc-label">
           Descripción <span class="tc-required">*</span>
         </label>
-        <textarea
-          class="tc-input tc-textarea"
-          placeholder="Descripción del tipo de cliente"
-          name="descripcion"
-          [(ngModel)]="tipoCliente.descripcion"
-          required>
+        <textarea class="tc-input tc-textarea" placeholder="Descripción del tipo de cliente" name="descripcion"
+          [(ngModel)]="tipoCliente.descripcion" required>
         </textarea>
       </div>
 
     </div>
 
     <div class="tc-form-actions">
-      <button type="button" class="tc-btn-secondary" (click)="tipoCliente = editingTipoCliente ? {...editingTipoCliente} : nuevoTipoCliente()">
+      <button type="button" class="tc-btn-secondary"
+        (click)="tipoCliente = editingTipoCliente ? {...editingTipoCliente} : nuevoTipoCliente()">
         <i class="fa-solid fa-rotate-left"></i>
         Limpiar
       </button>
 
-      <button type="submit" class="tc-btn-primary" [disabled]="tipoClienteForm.invalid">
+      <button type="submit" class="tc-btn-primary" [disabled]="tipoClienteForm.invalid || !hasChanges">
         <i class="fa-solid fa-floppy-disk"></i>
         {{ editingTipoCliente ? 'Actualizar' : 'Crear Tipo Cliente' }}
       </button>

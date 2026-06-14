@@ -40,9 +40,9 @@
                 Cancelar
             </button>
 
-            <button type="submit" class="usr-btn-primary" [disabled]="loading">
-                {{ editMode ? 'Actualizar' : 'Guardar' }}
-            </button>
+            <button type="submit" class="usr-btn-primary" [disabled]="loading || !hasChanges">
+  {{ editMode ? 'Actualizar' : 'Guardar' }}
+</button>
         </div>
     </form>
 </div>

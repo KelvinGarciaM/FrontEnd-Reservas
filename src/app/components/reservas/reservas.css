@@ -256,3 +256,42 @@
 .rsv-icon-red   { color: #dc2626; }
 .rsv-icon-amber { color: #d97706; }
 .rsv-icon-gray  { color: #64748b; }
+
+
+@media (max-width: 768px) {
+  .app-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .rsv-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .rsv-main-layout {
+    flex-direction: column;
+  }
+
+  .rsv-side-panel {
+    width: 100%;
+  }
+
+  .rsv-actions-bar {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .rsv-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .rsv-stat-card {
+    padding: 12px;
+  }
+
+  .rsv-stat-value {
+    font-size: 18px;
+  }
+}
