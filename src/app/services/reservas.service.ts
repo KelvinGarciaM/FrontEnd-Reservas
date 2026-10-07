@@ -20,15 +20,15 @@ export class ReservasService {
   }
 
   getReservaById(id: number): Observable<Reserva> {
-    return this._http.get<Reserva>(`${this.url}${id}`);
+    return this._http.get<Reserva>(`${this.url}/${id}`);
   }
 
   getReservasByCliente(idCliente: string): Observable<Reserva[]> {
-    return this._http.get<Reserva[]>(`${this.url}cliente/${idCliente}`);
+    return this._http.get<Reserva[]>(`${this.url}/cliente/${idCliente}`);
   }
 
   getReservasByRecepcionista(idRecepcionista: string): Observable<Reserva[]> {
-    return this._http.get<Reserva[]>(`${this.url}recepcionista/${idRecepcionista}`);
+    return this._http.get<Reserva[]>(`${this.url}/recepcionista/${idRecepcionista}`);
   }
 
   createReserva(reserva: Reserva): Observable<any> {

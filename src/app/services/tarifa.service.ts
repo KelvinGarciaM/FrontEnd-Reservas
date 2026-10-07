@@ -16,12 +16,18 @@ export class TarifaService {
   }
 
   createTarifa(tarifa: Tarifa): Observable<any> {
-    let data = JSON.stringify(tarifa);
-    return this._http.post(this.url + 'tarifas', data, this.headers);
+    return this._http.post(
+      this.url + 'tarifas',
+      tarifa,
+      { headers: this.headers }
+    );
   }
 
   getTarifas(): Observable<any> {
-    return this._http.get(this.url + 'tarifas', this.headers);
+    return this._http.get(
+      this.url + 'tarifas',
+      { headers: this.headers }
+    );
   }
 
   updateTarifa(idTarifa: number, tarifa: Tarifa) {
@@ -44,10 +50,10 @@ export class TarifaService {
     );
   }
 
-  getEstadisticasTarifa(idTarifa:number){
-  return this._http.get(
-    this.url + 'tarifas/' + idTarifa + '/estadisticas',
-    { headers: this.headers }
-  );
-}
+  getEstadisticasTarifa(idTarifa: number) {
+    return this._http.get(
+      this.url + 'tarifas/' + idTarifa + '/estadisticas',
+      { headers: this.headers }
+    );
+  }
 }

@@ -29,7 +29,7 @@ export class RecepcionistaService {
 
   register(recepcionista: Recepcionista): Observable<any> {
     const body = {
-      cedula: Number(recepcionista.cedula),
+      cedula: recepcionista.cedula,
       nombre: recepcionista.nombre,
       apellidos: recepcionista.apellidos,
       telefono: recepcionista.telefono,
@@ -46,7 +46,7 @@ export class RecepcionistaService {
 
   updateRecepcionista(recepcionista: Recepcionista): Observable<any> {
     const body = {
-      cedula: Number(recepcionista.cedula),
+      cedula: recepcionista.cedula,
       nombre: recepcionista.nombre,
       apellidos: recepcionista.apellidos,
       telefono: recepcionista.telefono,
@@ -59,14 +59,14 @@ export class RecepcionistaService {
 
   deleteRecepcionista(cedula: string): Observable<any> {
     return this._http.request('delete', this.url, {
-      body: { cedula: Number(cedula) }
+      body: { cedula }
     });
   }
 
   toggleEstado(cedula: string) {
   return this._http.put(
     `${this.url}/toggle`,
-    { cedula: Number(cedula) }
+    { cedula }
   );
 }
 }
