@@ -310,7 +310,8 @@
 }
 
 .hl-submenu-open {
-  max-height: 220px;
+  max-height: 450px;
+  overflow-y: auto;
 }
 
 .hl-sub-item {

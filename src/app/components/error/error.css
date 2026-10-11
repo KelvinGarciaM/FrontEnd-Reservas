@@ -1,11 +1,11 @@
-.ad-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
+.error-container {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
 }
 
-.ad-card {
+.error-card {
   text-align: center;
   padding: 48px 40px;
   background: #fff;
@@ -15,7 +15,7 @@
   width: 100%;
 }
 
-.ad-icon {
+.error-icon {
   width: 64px;
   height: 64px;
   background: rgba(239,68,68,0.1);
@@ -28,20 +28,20 @@
   color: #ef4444;
 }
 
-.ad-title {
+.error-title {
   font-size: 20px;
   font-weight: 500;
   color: #1e293b;
   margin: 0 0 8px;
 }
 
-.ad-text {
+.error-text {
   font-size: 14px;
   color: #64748b;
   margin: 0 0 28px;
 }
 
-.ad-btn {
+.error-btn {
   display: inline-flex;
   align-items: center;
   background: #2563eb;
@@ -54,7 +54,7 @@
   transition: background 0.15s;
 }
 
-.ad-btn:hover {
+.error-btn:hover {
   background: #1d4ed8;
   color: #fff;
 }

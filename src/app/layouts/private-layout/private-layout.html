@@ -4,9 +4,7 @@
     <nav class="hl-sidebar">
 
         <div class="hl-logo">
-                <img src="assets/images/logo.png" 
-                alt="Logo Hotel"
-                class="hl-logo-img">
+            <img src="assets/images/logo.png" alt="Logo Hotel" class="hl-logo-img">
             <span class="hl-logo-text">Hotel</span>
         </div>
 
@@ -23,15 +21,15 @@
                 <i class="fa-solid fa-users"></i>
                 <span class="hl-nav-label">Clientes</span>
             </a>
-           
-           
+
+
         </div>
 
         <div class="hl-nav-divider"></div>
 
         <div class="hl-nav-section">
 
-            @if(authService.currentUser()?.role === 'Administrador') {
+            @if(authService.isAdmin()) {
             <button class="hl-nav-item hl-sub-toggle" [class.hl-active]="cfgOpen" (click)="cfgOpen = !cfgOpen">
                 <i class="fa-solid fa-gear"></i>
                 <span class="hl-nav-label">Configuración</span>
@@ -52,10 +50,6 @@
                     <i class="fa-solid fa-bed"></i>
                     <span>Habitaciones</span>
                 </a>
-                <a routerLink="/usuarios" routerLinkActive="hl-sub-active" class="hl-sub-item">
-                    <i class="fa-solid fa-user-group"></i>
-                    <span>Usuarios</span>
-                </a>
                 <a routerLink="/tipos-cliente" routerLinkActive="hl-sub-active" class="hl-sub-item">
                     <i class="fa-solid fa-address-card"></i>
                     <span>Tipos Cliente</span>
@@ -64,6 +58,12 @@
                     <i class="fa-solid fa-user-tie"></i>
                     <span>Recepcionistas</span>
                 </a>
+
+                <a routerLink="/respaldo" routerLinkActive="hl-sub-active" class="hl-sub-item">
+                    <i class="fa-solid fa-database"></i>
+                    <span>Respaldos y restauración</span>
+                </a>
+
             </div>
             }
 

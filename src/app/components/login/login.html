@@ -14,7 +14,7 @@
     <h2 class="lg-title">Iniciar sesión</h2>
 
     <p class="lg-subtitle">
-      Ingresa tus credenciales para continuar
+      Ingresa tu usuario de base de datos para continuar
     </p>
 
     <!-- MENSAJES -->
@@ -26,12 +26,20 @@
     </div>
     }
 
+    @if(status() === 2) {
+    <div class="lg-alert lg-alert-warning">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      Tu usuario no tiene un rol asignado en el sistema
+    </div>
+    }
+
     @if(status() === 1) {
     <div class="lg-alert lg-alert-warning">
       <i class="fa-solid fa-triangle-exclamation"></i>
       Error del servidor
     </div>
     }
+
     <!-- FORMULARIO -->
 
     <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
@@ -39,18 +47,19 @@
       <div class="lg-field">
 
         <label class="lg-label">
-          Correo electrónico
+          Usuario
         </label>
 
         <div class="lg-input-wrap">
-          <i class="fa-solid fa-envelope lg-input-icon"></i>
+          <i class="fa-solid fa-user lg-input-icon"></i>
 
           <input
-            type="email"
-            name="email"
+            type="text"
+            name="username"
             class="lg-input"
-            placeholder="correo@ejemplo.com"
-            [(ngModel)]="user.email"
+            placeholder="Usuario de base de datos"
+            autocomplete="username"
+            [(ngModel)]="username"
             required>
 
         </div>
@@ -70,7 +79,8 @@
             name="password"
             class="lg-input"
             placeholder="••••••••"
-            [(ngModel)]="user.password"
+            autocomplete="current-password"
+            [(ngModel)]="password"
             required>
 
         </div>
