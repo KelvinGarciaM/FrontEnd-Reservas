@@ -21,6 +21,10 @@ import { TiposClienteComponent } from './components/tipos-cliente/tipos-cliente'
 import { Reservas } from './components/reservas/reservas';
 import { Dashboard } from './components/dashboard/dashboard';
 
+// Vista nueva de respaldo.
+// IMPORTANTE: el nombre entre llaves debe ser igual al "export class ..." de respaldo.ts
+import { RespaldoComponent } from './components/respaldo/respaldo';
+
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
@@ -44,7 +48,7 @@ export const routes: Routes = [
       { path: 'tarifa-list', component: TarifaList },
       { path: 'tarifa-add', component: TarifaAdd },
       { path: 'tarifas/editar/:id', component: TarifaEdit },
-      {path: 'tarifas/detalle/:id', component: TarifaDetail},
+      { path: 'tarifas/detalle/:id', component: TarifaDetail },
 
       // solo admin
       { path: 'reservas', component: Reservas },
@@ -52,11 +56,11 @@ export const routes: Routes = [
       { path: 'tipos-habitacion', component: TipoHabitacionComponent, canActivate: [adminGuard] },
       { path: 'habitacion', component: HabitacionComponent, canActivate: [adminGuard] },
       { path: 'recepcionistas', component: RecepcionistaComponent, canActivate: [adminGuard] },
+      { path: 'respaldo', component: RespaldoComponent, canActivate: [adminGuard] },
 
-      { path: 'tipos-cliente', component: TiposClienteComponent},
-      { path: 'clientes', component:ClientesComponent}
-    ]
-
+      { path: 'tipos-cliente', component: TiposClienteComponent },
+      { path: 'clientes', component: ClientesComponent },
+    ],
   },
 
   { path: '**', redirectTo: 'login' },
