@@ -1,8 +1,9 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { User } from '../../models/user';
 import { AuthService, LoginResponse } from '../../services/auth.service';
 
 @Component({
@@ -13,14 +14,16 @@ import { AuthService, LoginResponse } from '../../services/auth.service';
   styleUrl: './login.css',
 })
 export class Login {
+
   public status = signal(-1);
-  public username = '';
-  public password = '';
+  public user: User;
 
   constructor(
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) {
+    this.user = new User(null, '', '', '', 1, '', '');
+  }
 
   onSubmit(form: any) {
     this.status.set(-1);
@@ -29,13 +32,15 @@ export class Login {
       return;
     }
 
-    // El usuario y la contraseña son los de SQL Server (usuario del motor).
-    this.authService.login(this.username.trim(), this.password).subscribe({
+    this.authService.login(this.user).subscribe({
+
+
+
       next: (response: LoginResponse) => {
         Swal.fire({
           icon: 'success',
           title: '¡Bienvenido!',
-          text: `Sesión iniciada como ${response.user.role}`,
+          text: `Hola, ${response.user.name ?? ''}`,
           timer: 1500,
           showConfirmButton: false
         }).then(() => {
@@ -44,11 +49,9 @@ export class Login {
       },
       error: (err) => {
         if (err.status === 401 || err.status === 404) {
-          this.status.set(0);   // usuario o contraseña incorrectos
-        } else if (err.status === 403) {
-          this.status.set(2);   // usuario del motor sin rol en el sistema
+          this.status.set(0);
         } else {
-          this.status.set(1);   // error del servidor
+          this.status.set(1);
         }
       }
     });

@@ -1,6 +1,6 @@
-import { Injectable, signal, computed } from "@angular/core";
+import { Injectable, signal } from "@angular/core";
 import { User } from "../models/user";
-import { Observable, tap, catchError, of } from "rxjs";
+import { Observable, tap } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { enviroment } from "../enviroments";
 
@@ -17,9 +17,6 @@ export class AuthService {
   private readonly url: string;
 
   currentUser = signal<User | null>(null);
-
-  // Atajo para mostrar u ocultar funciones en las pantallas.
-  isAdmin = computed(() => this.currentUser()?.role === 'Administrador');
 
   constructor(private _http: HttpClient) {
     this.url = enviroment.apiUrl;
@@ -43,15 +40,14 @@ export class AuthService {
     }
   }
 
-  // Inicia sesión con un usuario del motor de base de datos.
-  login(username: string, password: string): Observable<LoginResponse> {
+  login(credentials: User): Observable<LoginResponse> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
     return this._http.post<LoginResponse>(
       this.url + "login",
-      { username, password },
+      credentials,
       { headers }
     ).pipe(
       tap((response) => {
@@ -68,17 +64,7 @@ export class AuthService {
     );
   }
 
-  // Avisa al servidor (queda en la auditoría) y limpia la sesión local.
-  // Aunque el servidor falle o la sesión ya haya vencido, igual se limpia.
-  logout(): Observable<unknown> {
-    return this._http.post(this.url + "logout", {}).pipe(
-      catchError(() => of(null)),
-      tap(() => this.clearLocalSession())
-    );
-  }
-
-  // Limpia la sesión solo en el navegador (sin llamar al servidor).
-  clearLocalSession(): void {
+  logout(): void {
     this.clearSession();
     this.currentUser.set(null);
   }
@@ -90,6 +76,18 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return !!sessionStorage.getItem('token');
+  }
+
+  register(user: User): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this._http.post(
+      this.url + "users",
+      user,
+      { headers }
+    );
   }
 
   getToken(): string | null {

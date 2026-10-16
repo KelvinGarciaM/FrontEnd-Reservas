@@ -30,14 +30,13 @@ export class RecepcionistaFormComponent implements OnChanges {
   ) {}
 
   ngOnChanges(): void {
-    console.log('ngOnChanges editingRecepcionista:', this.editingRecepcionista);
     if (this.editingRecepcionista) {
       this.recepcionista = { ...this.editingRecepcionista };
       this.editMode = true;
-      console.log('editMode:', this.editMode);
     } else {
       this.resetForm();
     }
+
     this.cdr.detectChanges();
   }
 

@@ -29,32 +29,36 @@ export class RecepcionistaService {
 
   register(recepcionista: Recepcionista): Observable<any> {
     const body = {
-
-      cedula: String(recepcionista.cedula),
+      cedula: recepcionista.cedula,
       nombre: recepcionista.nombre,
       apellidos: recepcionista.apellidos,
       telefono: recepcionista.telefono,
       correo: recepcionista.correo
     };
+    console.log('================================');
+  console.log('BODY ENVIADO AL BACKEND');
+  console.log(body);
+  console.log(JSON.stringify(body));
+  console.log('================================');
+
     return this._http.post(this.url, body);
   }
 
   updateRecepcionista(recepcionista: Recepcionista): Observable<any> {
     const body = {
-
-      cedula: String(recepcionista.cedula),
+      cedula: recepcionista.cedula,
       nombre: recepcionista.nombre,
       apellidos: recepcionista.apellidos,
       telefono: recepcionista.telefono,
       correo: recepcionista.correo,
-      estado: (recepcionista.estado !== undefined && recepcionista.estado !== null) ? Number(recepcionista.estado) : 1
+      estado: Number(recepcionista.estado)
     };
+
     return this._http.put(this.url, body);
   }
 
   deleteRecepcionista(cedula: string): Observable<any> {
     return this._http.request('delete', this.url, {
-<<<<<<< HEAD
       body: { cedula }
     });
   }
@@ -65,16 +69,4 @@ export class RecepcionistaService {
     { cedula }
   );
 }
-=======
-      body: { cedula: String(cedula) }
-    });
-  }
-
-  toggleEstado(cedula: string): Observable<any> {
-    return this._http.put(
-      `${this.url}/toggle`,
-      { cedula: String(cedula) }
-    );
-  }
->>>>>>> b386bc4 (New view respaldo y login con usuarios de db)
 }
